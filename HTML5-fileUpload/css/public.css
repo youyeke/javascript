@@ -1,0 +1,17 @@
+.icon-file-30px{
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	background-image: url(../img/icon-file-30px.png);
+	background-repeat: no-repeat;
+	vertical-align: middle;
+}
+.icon-file-30px-doc{background-position: 0 0;}
+.icon-file-30px-ppt{background-position: -30px 0;}
+.icon-file-30px-xls{background-position: -60px 0;}
+.icon-file-30px-img{background-position: 0 -30px;}
+.icon-file-30px-video{background-position: -30px -30px;}
+.icon-file-30px-txt{background-position: -60px -30px;}
+.icon-file-30px-zip{background-position: 0 -60px;}
+.icon-file-30px-rar{background-position: -30px -60px;}
+.icon-file-30px-file{background-position: -60px -60px;}
