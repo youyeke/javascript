@@ -1,56 +1,6 @@
 body{
 	padding-top: 70px;
 }
-nav{
-	background-color: #eee;
-}
-nav a>span{
-	margin-right: 10px;
-}
-#header *{
-	transition:all 0.2s;
-}
-#header .navbar-brand{
-	color: #428bca;
-}
-#header .navbar-brand:hover{
-	color: #0ff;
-}
-#navbar-right{
-	margin-right: 30px;
-}
-#curriculum tr:first-child{
-	height: 2em;
-	background-color: #428bca;
-	color: #fff;
-}
-#curriculum tr:first-child td{
-	border: none;
-}
-#curriculum{
-	text-align: center;
-}
-#curriculum tr{
-	height: 4em;
-}
-#curriculum td{
-	min-width: 6em;
-	border-top: 1px solid #428bca;
-}
-#curriculum td[rowspan]+td,
-#curriculum tr td:first-child{
-	line-height: 4em;
-}
-#curriculum tr td[rowspan="2"]{
-	line-height: 8em;
-}
-
-#leftNav a i{
-	padding-right: 10px;
-}
-#leftNav li ul{
-	text-indent: 2em;
-}
 #upWorkFileUI{
 	width: 600px;
 }
