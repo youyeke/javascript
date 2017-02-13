@@ -190,13 +190,10 @@
 		            	tips.innerHTML=tem>=100?"<font color='#00f'>正在处理</font>":tem+"%";
         			}
         			function mergeFiles(){
-        				var paht = window.path;
         				var command= new FormData();
         				command.append("fileName",fileArray[i].name);
                         command.append("fileEndID",fileEndID);
                         command.append("md5",md5[i]);
-                        command.append("parent",paht[0]);
-                        command.append("child",paht[1]);
         				sendAjax(mergeFilesAction,command,mergeFilesSuccess,mergeFilesFailed)
         			}
         			function mergeFilesSuccess(responseText){
