@@ -101,7 +101,7 @@
 					default:
 							return "文件过大";
 				}
-			}
+		}
 		//绑定上传列表操作事件(移除上传列表的文件)
 		fileList.addEventListener("click",function(e){
 			if(e.target.getAttribute("data-type")=="delete"){
@@ -122,6 +122,11 @@
 		//提交表单
         document.getElementById("upWorkFile").onsubmit=function(){
         	for (var i=0,j=fileArray.length;i<j;i++) {
+        		var successList=[],
+        			successNumber=0,
+        			sumNumber=fileArray.length,
+        			failedFileList=[],
+        			failedMD5=[];
         		/*闭包开始----为每个需要上传的文件建立一个单独命名空间*/
         		(function(i,size){
         			var tips=document.getElementById("FL"+i).getElementsByTagName("div")[3],
@@ -185,10 +190,13 @@
 		            	tips.innerHTML=tem>=100?"<font color='#00f'>正在处理</font>":tem+"%";
         			}
         			function mergeFiles(){
+        				var paht = window.path;
         				var command= new FormData();
         				command.append("fileName",fileArray[i].name);
                         command.append("fileEndID",fileEndID);
                         command.append("md5",md5[i]);
+                        command.append("parent",paht[0]);
+                        command.append("child",paht[1]);
         				sendAjax(mergeFilesAction,command,mergeFilesSuccess,mergeFilesFailed)
         			}
         			function mergeFilesSuccess(responseText){
@@ -197,10 +205,25 @@
         				console.log(responseText);
         				if(responseText=="校验成功"){
         					tips.innerHTML="<font color='#0f0'>上传成功</font>";
-								fileArray.splice(i,1);
-								md5.splice(i,1);
+//								fileArray.splice(i,1);
+//								md5.splice(i,1);
+							successList[i]=true;
+							successNumber++;
+							if(successNumber==sumNumber){
+								successList.forEach(function(item,index){
+									if(!item){
+										failedFileList.push(fileArray[index]);
+										failedMD5.push(md5[index]);
+									};
+								});
+								fileArray=[];
+								md5=[];
+								fileArray.concat(failedFileList);
+								md5.concat(failedMD5);
+							};
         				}else{
         					tips.innerHTML="<font color='#f00'>上传失败</font>";
+        					successList[i]=false;
         				}
         			}
         			function mergeFilesFailed(){
@@ -229,4 +252,4 @@
         	
         	return false;
         };
-	})();
+	})(window);
