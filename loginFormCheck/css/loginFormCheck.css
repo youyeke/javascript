@@ -1,0 +1,116 @@
+﻿#loadedFileUI{
+	width: 710px;
+	margin-top: 10px;
+}
+#loadFileList{
+	display: table;
+	padding: 0;
+	width: 100%;
+}
+#loadFileList li{
+	width: 100%;
+	display: table-row;
+}
+#loadFileList>li:first-child{
+	background-color: #eee;
+}
+#loadFileList li div{
+	display: table-cell;
+	padding: 0.4em;
+}
+#loadFileList li div:not(:first-child){
+	display: inline-block;
+	width: 6em;
+}
+#loadFileList li div:nth-child(2){
+	min-width: 40%;
+    height: 32px;
+    line-height: 36px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#loadFileList li div:nth-child(5){
+	min-width: 11em;
+}
+#login{
+	width: 800px;
+	background-color: #31708f;
+	margin: 0 auto;
+}
+#login>div{
+	background-image: url(../img/bj-solid.png);
+	background-size: 100% 100%;
+	height: 180px;
+	text-align: center;
+	color: white;
+	transition: all 0.5s;
+}
+#login:hover>div{
+	background-size: 150% 150%;
+	background-position: 50% 50%;
+	transition: background-size 0.5s;
+}
+#login form{
+	padding: 1.2em 0;
+	position: absolute;
+	width: 240px;
+	left: calc(50% - 120px);
+}
+#login form span{
+	font-size: 32px;
+}
+#login form input{
+	display: block;
+	width: 100%;
+	color: #31708f;
+	font-weight: 500;
+}
+#login form div{
+	position: relative;
+}
+#login form div>input{
+	border: none;
+	text-indent: 5px;
+}
+#login form div>input:focus{
+	outline: none;
+}
+#login form div input{border-radius:5px 5px 0 0;}
+#login form div+div input{border-radius:0 0 5px 5px;}
+#login form input[type="submit"]{
+	margin: 10px 0;
+}
+@media only screen and (max-width: 480px) {
+#login{
+	width: 360px;
+}
+#login>div{
+	background-image: none;
+}
+}
+.button{
+	border: 1px solid #31708f;
+	background-color: white;
+	font-size: 16px;
+	line-height: 22px;
+	transition: all 0.5s;
+	padding: 5px 16px;
+	color: #000;
+}
+.button:hover{
+	background-color: #31708f;
+	color: white !important;
+	border: 1px solid white;
+}
+/*表单验证样式*/
+.input-error{
+	outline: 1px #f00 solid;
+	color: #f00;
+}
+.input-error-Message{
+	position: absolute;
+    top: 2px;
+    right: 5px;
+	color: #f00;
+	font-size: 12px;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登陆</title>
+		<link href="css/loginFormCheck.css" rel="stylesheet" />
+		<script src="js/loginFormCheck.js"></script>
+	</head>
+	<body>
+		<div id="login">
+			<div>
+				<form>
+					<span>登陆</span>
+					<div>
+						<input type="text" id="userName" autocomplete="off" placeholder="用户名" />
+					</div>
+					<div>
+						<input type="password" id="password" placeholder="密码" />
+					</div>
+					<input type="submit" class="button" value="登陆" />
+				</form>
+			</div>
+		</div>
+		<script>
+			var loginCheck = new FormCheck({
+				formObj : document.getElementById("login").getElementsByTagName("form")[0],
+				callback : function(){
+					console.log("通过ajax提交表单");
+				}
+			});
+			loginCheck.bind(0,"mail","请输入您的用户名","用户名格式错误");
+			loginCheck.bind(1,"^[A-z0-9]{6,16}$","请输入您的密码","密码格式错误");
+			loginCheck.ready();
+		</script>
+	</body>
+</html>
