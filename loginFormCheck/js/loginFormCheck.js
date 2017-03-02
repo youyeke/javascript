@@ -4,7 +4,7 @@
 				this.callback = obj.callback;
 				this.bindList = [];
 	}
-	FormCheck.prototype.bind = function(index,regexp,requiredMessage,faildMessage){
+	FormCheck.prototype.bind = function(index,regexp,requiredMessage,failedMessage){
 		//未来需求：当文本框失去焦点后触发ajax
 		var obj = this.obj,
 			bindList = this.bindList;
@@ -13,7 +13,7 @@
 			bindObj : obj[index],
 			Regexp : regexp,
 			requiredMessage : requiredMessage,
-			faildMessage : faildMessage
+			failedMessage : failedMessage
 		});
 	};
 	FormCheck.prototype.check = function(input){
@@ -45,9 +45,9 @@
 					statu.result=true;
 					return statu;
 				}else{
-					console.log(input.faildMessage);
+					console.log(input.failedMessage);
 					statu.result=false;
-					statu.message=input.faildMessage;
+					statu.message=input.failedMessage;
 					return statu;
 				};
 			};
