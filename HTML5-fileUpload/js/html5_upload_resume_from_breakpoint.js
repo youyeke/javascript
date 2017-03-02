@@ -1,252 +1,313 @@
 //(c) Copyright 2017 youye. All Rights Reserved. 
-(function(){
-		var upFile=document.getElementById("upWork"),
-			fileList=document.getElementById("fileList"),
-			upListOL="<li><div>文件名</div><div>类型</div><div>大小</div><div>状态</div><div>操作</div></li>",
-			formAction="PHPsystem/fileUpload.php",
-			fileMD5Qurey="PHPsystem/fileMD5Qurey.php",
-			mergeFilesAction="PHPsystem/mergeFiles.php",
-			fileArray= [],//修改上传队列时的修改对象
-			spark = new SparkMD5(),
-			md5=[],
-			fileChunk=2*1024*1024;//断点续传时文件的分割大小
-		
-		//绑定上传事件
-		upFile.addEventListener("change",function(){
-			fileList.innerHTML=upListOL;
-			fileList.style.display="table";
-			Array.prototype.push.apply(fileArray,upFile.files);
-			for(var i=0;fileArray[i];i++){
-				var fileInfo=fileArray[i];
-					(function(fileInfo,i){
-						var fileReader = new FileReader();
-						fileReader.readAsBinaryString(fileInfo);
-						fileReader.onload = function(e){
-							spark.appendBinary(e.target.result);
-							//md5.splice(i,0,spark.end());//用这种方法MD5的顺序会乱
-							md5[i]=spark.end();
-							createList(i,fileInfo.name,getFileType(fileInfo.type),getFileSize(fileInfo.size),"等待上传","取消");
-						}
-					})(fileInfo,i)
-			}
-			
-			console.log(fileArray);
-			console.log(md5);
-			
-		});
-		function createList(i,fName,fType,fSize,message,buttonV){
-				var fileListHTML=[
-					"<li id=\"FL"+i+"\">",
-					"<div>"+fName+"</div>",
-					"<div>"+fType+"</div>",
-					"<div>"+fSize+"</div>",
-					"<div>"+message+"</div>",
-					"<div><a href=\"javascript:;\" data-type=\"delete\" data-id=\"FL"+i+"\">"+buttonV+"</a></div>",
-					"</li>"
-				].join("");
-				fileList.innerHTML+=fileListHTML;
+(function(window,undefined){
+	var $ = function(id){
+		return document.getElementById(id);
+	};
+	var Ajax = function(obj){
+		this.type = obj.type || "";
+		this.url = obj.url || "";
+		this.data = obj.data || "";
+		this.success = obj.success || "";
+		this.failed = obj.failed || "";
+		this.progress = obj.progress || "";
+	};
+	Ajax.prototype.send = function(){
+		var type=this.type,
+			url=this.url,
+			data=this.data,
+			success=this.success,
+			failed=this.failed,
+			progress=this.progress;
+		var xhr = new XMLHttpRequest;
+		if(progress){
+			xhr.upload.addEventListener("progress",function(obj){
+				progress(obj);
+			},false);
 		}
-		function getFileType(type){
-			switch(type){
-				case "application/msword":
-				case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-						return "<span class=\"icon-file-30px icon-file-30px-doc\"></span>";
-						break;
-				case "application/vnd.ms-powerpoint":
-				case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-						return "<span class=\"icon-file-30px icon-file-30px-ppt\"></span>";
-						break;
-				case "application/vnd.ms-excel":
-				case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-						return "<span class=\"icon-file-30px icon-file-30px-xls\"></span>";
-						break;
-				case "image/jpeg":
-				case "image/gif":
-				case "image/png":
-						return "<span class=\"icon-file-30px icon-file-30px-img\"></span>";
-						break;
-				case "video/mp4":
-				case "video/x-msvideo":
-				case "video/mpeg":
-				case "video/quicktime":
-				case "audio/x-ms-wmv":
-						return "<span class=\"icon-file-30px icon-file-30px-video\"></span>";
-						break;
-				case "text/plain":
-						return "<span class=\"icon-file-30px icon-file-30px-txt\"></span>";
-						break;
-				case "application/zip":
-				case "application/x-gzip":
-				case "application/x-zip-compressed":
-						return "<span class=\"icon-file-30px icon-file-30px-zip\"></span>";
-						break;
-				case "application/octet-stream":
-						return "<span class=\"icon-file-30px icon-file-30px-rar\"></span>";
-						break;
-				default:
-						return "<span class=\"icon-file-30px icon-file-30px-file\"></span>";
-			}
-		}
-		function getFileSize(size){
-				switch(true){
-					case size<1000:
-							return size+"B";
-							break;
-					case size<1000000:
-							return Math.round(size*100/1024)/100+"KB";
-							break;
-					case size<1000000000:
-							return Math.round(size*100/(1024*1024))/100+"MB";
-							break;
-					default:
-							return "文件过大";
+		xhr.onreadystatechange = function(e){
+			if(xhr.readyState==4){
+				if(xhr.status>=200 && xhr.status<300 || xhr.status==304){
+					success(xhr.responseText);
+				}else{
+					failed(xhr.status);
 				}
+			}
 		}
-		//绑定上传列表操作事件(移除上传列表的文件)
-		fileList.addEventListener("click",function(e){
-			if(e.target.getAttribute("data-type")=="delete"){
-				var dataID=e.target.getAttribute("data-id");
-				var child=document.getElementById(dataID);
-				fileList.removeChild(child);
-				fileArray.splice(dataID.match(/\d+/),1);
-				md5.splice(dataID.match(/\d+/),1);
-				fileList.innerHTML=upListOL;
-				for(var i=0;fileArray[i];i++){
-					(function(i){
-						createList(i,fileArray[i].name,fileArray[i].type,getFileSize(fileArray[i].size),"等待上传","取消");
-					})(i);
+		if(type=="GET"||type=="get"){
+			xhr.open(type,url,true);
+			xhr.send(null);
+		}else if(type=="POST"||type=="post"){
+			xhr.open(type,url,true);
+			xhr.send(data);
+		}else{
+			console.log("不支持的Ajax方法");
+			return;
+		}
+	}
+	var fileListCommand = {
+		create : function(index,fileInfo){
+			var fileListHTML=[
+					"<tr id=\"FL"+index+"\">",
+					"<td>"+fileInfo.name+"</td>",
+					"<td>"+this.getTypeStype(fileInfo.type)+"</td>",
+					"<td>"+this.getSize(fileInfo.size,"auto")+"</td>",
+					"<td>等待上传</td>",
+					"<td><a href=\"javascript:;\" data-type=\"delete\" data-id=\"FL"+index+"\">"+"取消"+"</a></td>",
+					"</tr>"
+				].join("");
+				return fileListHTML;
+		},
+		getTypeStype : function(mimeType){
+			var stypeMap = {
+				"application/msword" : "doc",
+				"application/vnd.openxmlformats-officedocument.wordprocessingml.document" : "doc",
+				"application/vnd.ms-powerpoint" : "ppt",
+				"application/vnd.openxmlformats-officedocument.presentationml.presentation" : "ppt",
+				"application/vnd.ms-excel" : "xls",
+				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" : "xls",
+				"image/jpeg" : "img",
+				"image/gif" : "img",
+				"image/png" : "img",
+				"video/mp4" : "video",
+				"video/x-msvideo" : "video",
+				"video/mpeg" : "video",
+				"video/quicktime" : "video",
+				"audio/x-ms-wmv" : "video",
+				"text/plain" : "txt",
+				"application/zip" : "zip",
+				"application/x-gzip" : "zip",
+				"application/x-zip-compressed" : "zip",
+				"application/octet-stream" : "rar",
+				"default" : "file"
+			};
+			return "<span class=\"icon-file-30px icon-file-30px-"+(stypeMap[mimeType] || stypeMap["default"])+"\"></span>";
+		},
+		getSize : function(fileSize,type,isUnits){
+			//接收三个参数，第一个：字节数(B)，第二个：数据转换的依据(例如输入KB则永远依照KB进行转换).第三个：返回值是否带单位(number or string)
+				var result=0;//缓存复杂运算的结果
+				var typeMap = {
+					"B" : function(size,isUnits){
+						return isUnits?(fileSize+"B"):fileSize;
+					},
+					"KB" : function(size,isUnits){
+						result=Math.round(fileSize*100/1024)/100;
+						return isUnits?(result+"KB"):result;
+					},
+					"MB" : function(size,isUnits){
+						result=Math.round(size*100/(1024*1024))/100;
+						return isUnits?(result+"MB"):result;
+					},
+					"auto" : function(size){
+						switch(true){
+							case size<1000:
+									return size+" B";
+									break;
+							case size<1000000:
+									return Math.round(size*100/1024)/100+" KB";
+									break;
+							case size<1000000000:
+									return Math.round(size*100/(1024*1024))/100+" MB";
+									break;
+							default:
+									return "文件过大";
+						}
+					},
+					"default" : function(){
+						return "第二个参数错误";
+					}
 				};
-				console.log(fileArray,name);
+				return typeMap[type](fileSize,isUnits) || typeMap["default"](fileSize,isUnits);
+		},
+		getFielMD5 : function(fileInfo,callback){
+			var fileReader = new FileReader,
+				spark = new SparkMD5();
+			var md5 = null;
+			fileReader.readAsBinaryString(fileInfo);
+			fileReader.onload = function(e){
+				spark.appendBinary(e.target.result);
+				md5=spark.end();
+				if (typeof(callback) === "function"){
+					callback(md5);
+				}
+			};
+		}
+	};
+	window.UploadJS = function(obj){
+		this.upWorkFileBox = obj.upWorkFileBox;
+		this.fileMD5Qurey = obj.fileMD5Qurey;
+		this.formAction = obj.formAction;
+		this.mergeFilesAction = obj.mergeFilesAction;
+		this.fileChunk = obj.fileChunk;
+	};
+	UploadJS.prototype.ready = function(){
+		var upWorkFileBox = this.upWorkFileBox;
+		var that = this;
+		var fileArray = this.fileArray = [],//用户选择上传的文件列,会转换为dom供用户操作
+			uploading = this.uploading = [];//确切要上传的文件，请确保由fileArray转化成
+		upWorkFileBox.innerHTML = [
+			"<form id=\"upWorkFileForm\"><input type=\"file\" class=\"file\" id=\"selectFile\" multiple />",
+		    "<span class=\"file-select-info\">选择需要上传的文件</span><input type=\"submit\" value=\"上传文件\" /></form>",
+		    "<table id=\"toBeUploaded\"></table>"
+		    ].join("");
+		var toBeUploadedOL="<tr><td>文件名</td><td>类型</td><td>大小</td><td>状态</td><td>操作</td></tr>";
+		setTimeout(function(){
+			var toBeUploaded = $("toBeUploaded");
+			/*选择文件时的操作*/
+			$("selectFile").addEventListener("change",function(){
+				Array.prototype.push.apply(fileArray,this.files);
+				if(fileArray.length>0){
+					toBeUploaded.style.display = "block";
+					updataList();
+				}else{
+					toBeUploaded.style = "";
+				}
+			});
+			/*移除上传列表的文件*/
+			toBeUploaded.addEventListener("click",function(e){
+				if(e.target.getAttribute("data-type") == "delete"){
+					var dataID = e.target.getAttribute("data-id");
+					var index = dataID.match(/\d/g);
+					fileArray.splice(index[0],1);
+					if(!fileArray.length>0){
+						toBeUploaded.style = "";
+					}
+					updataList();
+				}
+			})
+			/*提交事件*/
+			$("upWorkFileForm").addEventListener("submit",function(e){
+				e.preventDefault();
+				that.uploading = uploading;
+				that.queryUploadedMD5();
+			})
+			function updataList(){//没想好怎么把它封装好，就暂时丢这里用着先
+				uploading = [];
+				toBeUploaded.innerHTML = toBeUploadedOL;
+				fileArray.forEach(function(fileInfo,index){
+					toBeUploaded.innerHTML += fileListCommand.create(index,fileInfo);
+					fileListCommand.getFielMD5(fileInfo,function(md5){
+						uploading.push({
+							"fileInfo" : fileInfo,
+							"md5" : md5,
+							"DOM" : $("FL"+index)
+						});
+					});
+				});
+			}
+		},0);
+	};
+	UploadJS.prototype.queryUploadedMD5 = function(){
+		console.log(this);
+		var that = this,
+			uploading = this.uploading,
+			fileChunk = this.fileChunk,
+			fileMD5Qurey = this.fileMD5Qurey;
+		if(uploading.length>0){
+			uploading.forEach(function(info,index){
+				(function(info,index){
+					var queryData = new FormData(),
+						size = info.fileInfo.size,
+						fileEndID=Math.ceil(size/fileChunk)-1;//最后一个文件片段的ID,从0开始计数
+					that.uploading[index].fileEndID = fileEndID;
+					queryData.append("md5",info.md5);
+					queryData.append("fileEndID",fileEndID);
+					var queryUploaded = new Ajax({
+						type : "post",
+						url : fileMD5Qurey,
+						data : queryData,
+						success : function(data){
+							that.uploadFile(data,index);
+						}
+					});
+					queryUploaded.send();
+				})(info,index);
+			});
+		};
+	};
+	UploadJS.prototype.uploadFile = function(data,index){
+		(function(data,index){
+			var notUpload = data.match(/\d+/g);//取回未上传的片段ID作为数组
+			if(notUpload != undefined){
+				notUpload=notUpload.map(function(item){  
+			    	return parseInt(item);
+				});
+				var that = this;
+				var dom = this.uploading[index].DOM;
+					tips = dom.childNodes[3];
+				var fileChunk = this.fileChunk,
+					fileEndID = this.uploading[index].fileEndID,
+					size = this.uploading[index].fileInfo.size,
+					formAction = this.formAction;
+				var upload = 0,
+					needUpload = notUpload.length;
+				var uploadedSize=needUpload>1?(fileEndID-needUpload+1)*fileChunk:0,
+					concurrentList = [];//存储并发上传时各自的进度
+				console.log(this.uploading);
+				while(notUpload[0] !== undefined){
+					var fileID = notUpload[0];
+					(function(fileID,tips){
+						var endSize=(notUpload[0]==fileEndID)?size:((notUpload[0]+1)*fileChunk),
+		                	fileData= new FormData();
+		                fileData.append("file", that.uploading[index].fileInfo.slice((notUpload[0]*fileChunk),endSize));
+		                fileData.append("fileID",notUpload[0]);
+		                fileData.append("md5",that.uploading[index].md5);
+		                notUpload.shift();
+		                var uploadFile = new Ajax({
+							type : "post",
+							url : formAction,
+							data : fileData,
+							success : function(data){
+								upload++;
+								if(upload == needUpload){
+									uploadFile.progress = null;
+									that.mergeFiles(index);
+								}
+							},
+							failed : function(status){
+								console.log(status);
+							},
+							progress : function(e){
+								var nowLoadSize = 0;
+								concurrentList[fileID] = e.loaded;
+								concurrentList.forEach(function(uploadedSize){
+									nowLoadSize+=uploadedSize;
+								});
+		        				var tem=Math.round((uploadedSize+nowLoadSize)/size*10000)/100;
+		        				console.log(tips)
+		        				console.log(index)
+		        				console.log(tem)
+				            	tips.innerHTML=tem>=100?"<font color='#00f'>正在处理</font>":tem+"%";
+							}
+						});
+						uploadFile.send();
+					})(fileID,tips)
+	            };
+			}else{
+				this.mergeFiles(index);
+			}
+		}).call(this,data,index);
+	};
+	UploadJS.prototype.mergeFiles = function(index){
+		var that = this;
+		console.log(this.uploading[index])
+		var dom = this.uploading[index].DOM;
+			tips = dom.childNodes[3];
+		var command= new FormData(),
+			mergeFilesAction = this.mergeFilesAction;
+		command.append("fileName",this.uploading[index].fileInfo.name);
+        command.append("fileEndID",this.uploading[index].fileEndID);
+        command.append("md5",this.uploading[index].md5);
+        var mergeFilesCommand = new Ajax({
+			type : "post",
+			url : mergeFilesAction,
+			data : command,
+			success : function(data){
+				tips.innerHTML = "<font color='#0f0'>上传成功</font>";
+				console.log(that.uploading[index].fileInfo.name)
+				console.log(tips)
+				console.log(data);
 			}
 		});
-		//提交表单
-        document.getElementById("upWorkFile").onsubmit=function(){
-        	for (var i=0,j=fileArray.length;i<j;i++) {
-        		var successList=[],
-        			successNumber=0,
-        			sumNumber=fileArray.length,
-        			failedFileList=[],
-        			failedMD5=[];
-        		/*闭包开始----为每个需要上传的文件建立一个单独命名空间*/
-        		(function(i,size){
-        			var tips=document.getElementById("FL"+i).getElementsByTagName("div")[3],
-        				deleteButton=document.getElementById("FL"+i).getElementsByTagName("div")[4];
-        			var uploadedSize=0,//服务器已有的文件大小
-        				nowLoadSize=0,//当前已经传输了的大小
-        				concurrentList=[];//同一个文件的块并发上传时，每个块的进度都存储在这
-        			var notUpload=[],//未上传的文件片段ID
-        				fileEndID=Math.ceil(size/fileChunk)-1,//最后一个文件片段的ID,从0开始计数
-        				upComplete=0,//已经上传完成的片段数目
-        				sumUp=0;//总共需要上传的数目
-        			deleteButton.innerHTML="";
-        			readyQuery();
-        			function readyQuery(){
-        				var queryData= new FormData();
-	        			queryData.append("md5",md5[i]);
-	        			queryData.append("fileEndID",fileEndID);
-	        			sendAjax(fileMD5Qurey,queryData,readySendFile);
-        			};
-        			function readySendFile(queryData){
-        				notUpload=queryData.match(/\d+/g);//取回未上传的ID作为数组
-        				console.log(notUpload);
-        				if(notUpload!=null){
-        					sumUp=notUpload.length;
-        					uploadedSize=sumUp>1?(fileEndID-sumUp+1)*fileChunk:0;
-        					notUpload=notUpload.map(function(item){  
-						    	return parseInt(item);
-							});
-                            while(notUpload[0]!=undefined){
-                                var endSize=(notUpload[0]==fileEndID)?size:((notUpload[0]+1)*fileChunk),
-                                    fileData= new FormData();
-                                fileData.append("upFileList", fileArray[i].slice((notUpload[0]*fileChunk),endSize));
-                                fileData.append("fileID",notUpload[0]);
-                                fileData.append("md5",md5[i]);
-                                notUpload.shift();
-                                sendAjax(formAction,fileData,updataSuccess,updataFailed,getProgress);
-                            };
-                       }else{
-                       		mergeFiles();//如果没有需要上传的片段，则直接合并文件
-                       };
-        			};
-        			function updataSuccess(responseText){
-        				if(responseText=="success"){
-        					upComplete++;
-        				};
-        				if(upComplete==sumUp){
-        					tips.innerHTML="<font color='#00f'>正在处理</font>";
-        					mergeFiles();
-        				}
-        			};
-        			function updataFailed(status){
-        				console.log(status);
-        				tips.innerHTML="<font color='#f00'>未响应</font>";
-        			}
-        			function getProgress(loaded){
-        				concurrentList.push(loaded);
-        				while(concurrentList[0]){
-        					nowLoadSize+=concurrentList.pop();
-        				}
-        				var tem=Math.round((uploadedSize+nowLoadSize)/size*10000)/100;
-		            	tips.innerHTML=tem>=100?"<font color='#00f'>正在处理</font>":tem+"%";
-        			}
-        			function mergeFiles(){
-        				var command= new FormData();
-        				command.append("fileName",fileArray[i].name);
-                        command.append("fileEndID",fileEndID);
-                        command.append("md5",md5[i]);
-        				sendAjax(mergeFilesAction,command,mergeFilesSuccess,mergeFilesFailed)
-        			}
-        			function mergeFilesSuccess(responseText){
-        				console.log(fileArray[i].name);
-        				console.log(md5[i]);
-        				console.log(responseText);
-        				if(responseText=="校验成功"){
-        					tips.innerHTML="<font color='#0f0'>上传成功</font>";
-//								fileArray.splice(i,1);
-//								md5.splice(i,1);
-							successList[i]=true;
-							successNumber++;
-							if(successNumber==sumNumber){
-								successList.forEach(function(item,index){
-									if(!item){
-										failedFileList.push(fileArray[index]);
-										failedMD5.push(md5[index]);
-									};
-								});
-								fileArray=[];
-								md5=[];
-								fileArray.concat(failedFileList);
-								md5.concat(failedMD5);
-							};
-        				}else{
-        					tips.innerHTML="<font color='#f00'>上传失败</font>";
-        					successList[i]=false;
-        				}
-        			}
-        			function mergeFilesFailed(){
-        				tips.innerHTML="<font color='#f00'>失去响应</font>";
-        			}
-        			function sendAjax(url,data,success,failed,upload){
-        				var xhr=new XMLHttpRequest;
-        				xhr.open("post",url,true);
-			            xhr.upload.addEventListener("progress",function(e){
-			            	getProgress(e.loaded);
-		            	},false);
-			            xhr.onreadystatechange = function(e) {
-			                if (xhr.readyState == 4) {
-			                    if (xhr.status == 200) {
-			                    	success(xhr.responseText);
-			                	}else{
-			                		failed(xhr.status);
-			                	}
-			            	}
-			            };
-			        	xhr.send(data);
-        			};
-        		})(i,fileArray[i].size);
-			    /*闭包结束*/
-			}
-        	
-        	return false;
-        };
+		mergeFilesCommand.send();
+	};
 	})(window);

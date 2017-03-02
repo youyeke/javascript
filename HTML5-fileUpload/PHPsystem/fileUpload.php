@@ -4,8 +4,8 @@
 
     $temPath="../tem/";
 
-if(is_uploaded_file($_FILES['upFileList']['tmp_name'])){
-    move_uploaded_file($_FILES['upFileList']['tmp_name'],$temPath.$md5."/".$fileID);
+if(is_uploaded_file($_FILES['file']['tmp_name'])){
+    move_uploaded_file($_FILES['file']['tmp_name'],$temPath.$md5."/".$fileID);
     echo "success";
 }
 ?>

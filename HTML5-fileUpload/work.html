@@ -8,16 +8,17 @@
 		<script src="js/spark-md5.min.js"></script>
 	</head>
 	<body>
-		      	<div id="upWorkFileUI">
-		      		<h3 class="title">断点续传示例</h3>
-		      		<p>2017-01-15 20:34:50</p>
-		      		<form id="upWorkFile">
-		      			<input type="file" class="file" id="upWork" multiple />
-		      			<span class="file-select-info">选择需要上传的文件</span>
-		      			<input type="submit" value="上传文件" />
-		      		</form>
-		      		<ul id="fileList"></ul>
-		      	</div>
+		<div id="upWorkFileBox"></div>
 	<script src="js/html5_upload_resume_from_breakpoint.js"></script>
+	<script>
+		var upWorkFile = new UploadJS({
+			upWorkFileBox : document.getElementById("upWorkFileBox"),
+			fileMD5Qurey : "PHPsystem/fileMD5Qurey.php",
+			formAction : "PHPsystem/fileUpload.php",
+			mergeFilesAction : "PHPsystem/mergeFiles.php",
+			fileChunk : 2*1024*1024
+		});
+		upWorkFile.ready();
+	</script>
 	</body>
 </html>
