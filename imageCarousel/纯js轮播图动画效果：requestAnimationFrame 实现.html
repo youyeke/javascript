@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>原生js轮播</title>
+<style>
+
+#box{
+	width:800px;
+	height:450px;
+	position: relative;
+	overflow:hidden;
+}
+ul{
+	width:3200px;
+	position: relative;
+	padding: 0;
+}
+li{
+	display:block;
+	float: left;
+}
+li>img{
+	width:800px;
+	height:450px;
+}
+.switchImg{
+	position: absolute;
+	right: 10px;
+    bottom: 5px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px;
+    cursor: default;
+}
+.switchImg span{
+	background-color: hsla(180,35%,50%,0.6);
+	color: #fff;
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	transition: all 0.5s;
+}
+.switchImg span:hover{
+	background-color: hsla(180,100%,50%,0.6);
+}
+.switchImg .activeImg{
+	background-color: hsla(180,100%,50%,0.6);
+	font-weight: 900;
+}
+</style>
+</head>
+<body>
+<div id="box">
+	<ul id="list">
+    	<li><img src="images/1.jpg" /></li>
+        <li><img src="images/2.jpg" /></li>
+        <li><img src="images/3.jpg" /></li>
+        <li><img src="images/4.jpg" /></li>
+    </ul>
+    <div class="switchImg">
+    	<span class="activeImg">1</span>
+    	<span>2</span>
+    	<span>3</span>
+    	<span>4</span>
+    </div>
+</div>
+<script>
+	Object.prototype.myAnimate=function(type,endValue){
+		var obj=this;
+		var type=type;
+		var endValue=endValue;
+		var framePosition;
+		switch(type){
+			case "left":
+					var startValue= obj.style.left? parseFloat(obj.style.left): obj.clientLeft ;
+		}
+		var Position=startValue;
+		framePosition=(endValue-startValue)/60;
+		var i=60;
+		var execAnimate=function(){
+			Position+=framePosition;
+			obj.style.left=Position +"px";
+			if(--i){
+				requestAnimationFrame(execAnimate);
+			}
+		}
+		execAnimate();
+	}
+	/*初始化的参数*/
+	var list = document.getElementById("list"),
+		imgWidth=list.getElementsByTagName("li")[0].clientWidth,
+		switchImg=document.getElementById("box").getElementsByClassName("switchImg")[0],
+		imgIndex=0,
+		imgNumber=switchImg.getElementsByTagName("span").length,
+		Timer;
+
+	function changeImg(bumber){
+		var bumber=bumber?parseInt(bumber)-1:0;
+		imgIndex=bumber;
+		list.myAnimate("left",-imgWidth*bumber);
+	}
+	function startTimer(){
+		Timer=setInterval(function(){
+				if(++imgIndex>=imgNumber){
+					imgIndex=0;
+				}
+				switchImg.getElementsByTagName("span")[imgIndex].click();
+			},2000);
+	}
+
+	document.addEventListener("visibilitychange",function onVisibilityChange(e){
+		if(document.hidden){
+			clearInterval(Timer);
+		}
+		else{
+			startTimer();
+		}
+	})
+
+	switchImg.addEventListener("click",function(e){
+		document.getElementsByClassName("activeImg")[0].classList.remove("activeImg");
+		e.target.classList.add("activeImg");
+		changeImg(e.target.innerHTML);
+		clearInterval(Timer);
+		setTimeout(startTimer(),2000);
+	},false);
+
+	list.addEventListener("mouseover",function(e){
+		clearInterval(Timer);
+	},false)
+	list.addEventListener("mouseout",function(e){
+		startTimer();
+	},false)
+
+	startTimer();
+</script>
+</body>
+</html>
