@@ -16,6 +16,7 @@
 .imageCarousel ul li>img{
 	width:800px;
 	height:450px;
+	transition: all 0.5s;
 }
 .IC-switchImg{
 	position: absolute;
@@ -32,6 +33,7 @@
 	width: 20px;
 	height: 20px;
 	display: inline-block;
+	margin-right: 5px;
 	transition: all 0.5s;
 }
 .IC-switchImg span:hover{

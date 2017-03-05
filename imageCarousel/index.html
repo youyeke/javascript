@@ -4,24 +4,23 @@
 	<meta charset="UTF-8">
 	<title>轮播图示例</title>
 	<link rel="stylesheet" href="css/imageCarousel.css">
+	<script src="js/imageCarousel.js"></script>
 </head>
 <body>
-	<div class="imageCarousel">
-		<ul>
-	    	<li><img src="images/1.jpg" /></li>
-	        <li><img src="images/2.jpg" /></li>
-	        <li><img src="images/3.jpg" /></li>
-	        <li><img src="images/4.jpg" /></li>
-	    </ul>
-	    <div class="IC-switchImg">
-	    	<span class="activeImg">1</span>
-	    	<span>2</span>
-	    	<span>3</span>
-	    	<span>4</span>
-	    </div>
-	    <div class="IC-title">
-	    	<p>这是图片的title</p>
-	    </div>
-	</div>
+	<div id="demo"></div>
+	<script>
+		var demo = new ImageCarousel({
+			dom : document.getElementById("demo"),
+			imageList : ["images/1.jpg","images/2.jpg","images/3.jpg","images/4.jpg"],
+			titleList : ["这是第一张图片","这是第二张图片","这是第三张图片","这是第四张图片"],
+			path : "left",
+			speed : 1000,
+			sleep :2000,
+			hiddenTitle : false,
+			animationType : "CSS"
+		});
+		console.log(demo);
+		demo.ready()
+	</script>
 </body>
 </html>
