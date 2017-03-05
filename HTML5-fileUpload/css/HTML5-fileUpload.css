@@ -21,10 +21,10 @@
 }
 .file{
 	position: absolute;
-    width: 150px;
-    height: 34px;
-    cursor: pointer;
-    opacity: 0;
+	width: 150px;
+	height: 34px;
+	cursor: pointer;
+	opacity: 0;
 }
 .file-select-info,#upWorkFileForm input[type="submit"]{
 	display: inline-block;
@@ -72,13 +72,14 @@
 }
 #toBeUploaded tr td{
 	padding: 5px 10px;
-    vertical-align: middle;
+	vertical-align: middle;
 }
 #toBeUploaded tr td:first-child{
 	width: 50%;
 	text-align: left;
 	max-width: 15em;
-    overflow: hidden;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 #toBeUploaded tr td:not(:first-child){
 	min-width: 5em;
