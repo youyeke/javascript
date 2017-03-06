@@ -42,7 +42,7 @@
 			}
 		});
 		function createDom(){
-			dom.classList += " imageCarousel";
+			dom.classList +=" imageCarousel";
 			var domImage = "",
 				domImageSwith = "";
 			imageList.forEach(function(url,index){
@@ -70,6 +70,23 @@
 			console.log("%O",dom)
 			var switchImage = dom.childNodes[1];
 			that.animation();//初始化方法，以便惰性选择CSS动画或是JS动画
+			that.carousel();
+			/* 有关何时暂停轮播 start */
+			dom.addEventListener("mouseover",function(){
+				that.carousel("stop");
+			});
+			dom.addEventListener("mouseout",function(){
+				that.carousel();
+			});
+			document.addEventListener("visibilitychange",function(e){
+				if(document.hidden){
+					that.carousel("stop");
+				}
+				else{
+					that.carousel();
+				}
+			});
+			/* 有关何时暂停轮播 end */
 			switchImage.addEventListener("click",function(e){
 				if(e.target.tagName == "SPAN"){
 					that.animation(e.target.innerHTML);
@@ -114,5 +131,19 @@
 			child.classList = "";
 		});
 		switchButton.childNodes[index].classList = "activeImg";
-	}
+	};
+	ImageCarousel.prototype.carousel = function(){
+		var sleep = this.sleep,
+			that = this;
+		var timers;
+		this.carousel = function(){
+			if(arguments[0] != "stop"){
+				timers = window.setInterval(function(){
+					that.animation();
+				},sleep)
+			}else{
+				window.clearInterval(timers);
+			}
+		};
+	};
 })(window)
