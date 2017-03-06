@@ -2,7 +2,7 @@
 	window.ImageCarousel = function(obj){
 		this.dom = obj.dom;
 		this.width = obj.width || 800;
-		this.heigth = obj.heigth || 450;
+		this.height = obj.height || 450;
 		this.imageList = obj.imageList;
 		this.hrefList = obj.hrefList;
 		this.titleList = obj.titleList;
@@ -16,7 +16,7 @@
 		//把图片载入缓存，并绘制dom
 		var dom = this.dom,
 			width = this.width,
-			heigth = this.heigth,
+			height = this.height,
 			imageList = this.imageList,
 			hrefList = this.hrefList,
 			titleList = this.titleList;
@@ -24,7 +24,7 @@
 		var imageCacheCompleteAmount = 0;
 		var that = this;
 		dom.style.width = width +"px";
-		dom.style.heigth = heigth +"px";
+		dom.style.height = height +"px";
 		imageList.forEach(function(url,index){
 			var img = new Image();
 			img.src = url;
@@ -42,7 +42,7 @@
 			}
 		});
 		function createDom(){
-			dom.classList = "imageCarousel";
+			dom.classList += " imageCarousel";
 			var domImage = "",
 				domImageSwith = "";
 			imageList.forEach(function(url,index){
