@@ -4,6 +4,7 @@
 		this.width = obj.width || 800;
 		this.heigth = obj.heigth || 450;
 		this.imageList = obj.imageList;
+		this.hrefList = obj.hrefList;
 		this.titleList = obj.titleList;
 		this.path = obj.path;
 		this.speed = obj.speed;
@@ -17,10 +18,13 @@
 			width = this.width,
 			heigth = this.heigth,
 			imageList = this.imageList,
+			hrefList = this.hrefList,
 			titleList = this.titleList;
 			hiddenTitle = this.hiddenTitle
 		var imageCacheCompleteAmount = 0;
 		var that = this;
+		dom.style.width = width +"px";
+		dom.style.heigth = heigth +"px";
 		imageList.forEach(function(url,index){
 			var img = new Image();
 			img.src = url;
@@ -42,7 +46,7 @@
 			var domImage = "",
 				domImageSwith = "";
 			imageList.forEach(function(url,index){
-				domImage += "<li><img src="+url+"></li>";
+				domImage += "<li><a href="+hrefList[index]+"><img src="+url+"></a></li>";
 				if(index ==0){
 					domImageSwith += "<span class=\"activeImg\">"+(index+1)+"</span>";
 				}else{
@@ -95,6 +99,7 @@
 					currentIndex = index-1;
 				}
 				dom.childNodes[0].style.left = -currentIndex*width+"px";
+				this.switchStyle(currentIndex)
 			}
 		}else{
 			this.animation = function(index){
