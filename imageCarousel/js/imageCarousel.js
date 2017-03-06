@@ -84,17 +84,21 @@
 			that.carousel();
 			/* 有关何时暂停轮播 start */
 			dom.addEventListener("mouseover",function(){
-				that.carousel("stop");
+				that.carousel();
 			});
 			dom.addEventListener("mouseout",function(){
-				that.carousel();
+				if(that.status == "start"){
+					that.carousel("start");
+				}
 			});
 			document.addEventListener("visibilitychange",function(e){
 				if(document.hidden){
-					that.carousel("stop");
+					that.carousel();
 				}
 				else{
-					that.carousel();
+					if(that.status == "start"){
+						that.carousel("start");
+					}
 				}
 			});
 			/* 有关何时暂停轮播 end */
@@ -138,7 +142,7 @@
 	ImageCarousel.prototype.switchStyle = function(index){
 		var dom = this.dom,
 			titleList = this.titleList,
-			titleType = that.titleType,
+			titleType = this.titleType,
 			switchButton = dom.childNodes[1];
 		[].forEach.call(switchButton.children,function(child,index){
 			child.classList = "";
@@ -153,13 +157,22 @@
 			that = this;
 		var timers;
 		this.carousel = function(){
-			if(arguments[0] != "stop"){
-				timers = window.setInterval(function(){
-					that.animation();
-				},sleep)
-			}else{
-				window.clearInterval(timers);
-			}
+			var carouselMap = {
+				"start" : function(){
+					that.status = "start";
+					timers = window.setInterval(function(){
+							that.animation();
+					},sleep)
+				},
+				"stop" : function(){
+					that.status = "stop";
+					window.clearInterval(timers);
+				},
+				"default" : function(){
+					window.clearInterval(timers);
+				}
+			};
+			( carouselMap[arguments[0]] || carouselMap["default"] )();
 		};
 	};
 })(window)
