@@ -9,7 +9,7 @@
 		this.path = obj.path;
 		this.speed = obj.speed;
 		this.sleep = obj.sleep;
-		this.hiddenTitle = (obj.hiddenTitle == true)? true : false;
+		this.titleType = obj.titleType || "show";
 		this.animationType = obj.animationType || "JS";
 	};
 	ImageCarousel.prototype.ready = function(){
@@ -20,7 +20,7 @@
 			imageList = this.imageList,
 			hrefList = this.hrefList,
 			titleList = this.titleList;
-			hiddenTitle = this.hiddenTitle
+			titleType = this.titleType
 		var imageCacheCompleteAmount = 0;
 		var that = this;
 		dom.style.width = width +"px";
@@ -64,11 +64,22 @@
 	    		"<p>"+titleList[0]+"</p>",
 	    		"</div>"
 			].join("");
-			if(!hiddenTitle){
-				dom.childNodes[2].style.bottom ="0";
-			}
-			console.log("%O",dom)
 			var switchImage = dom.childNodes[1];
+			var titleMap = {
+				"show" : function(){
+					dom.childNodes[2].style.bottom ="0";
+				},
+				"hide" : function(){
+				},
+				"none" : function(){
+					dom.childNodes[2].removeChild(dom.childNodes[2].childNodes[0]);
+				},
+				"default" : function(){
+					console.warn("titleType arguments error! must be 'show' or 'hede' or 'none' ");
+				}
+			};
+			(titleMap[titleType] || titleType["default"])();
+			console.log("%O",dom)
 			that.animation();//初始化方法，以便惰性选择CSS动画或是JS动画
 			that.carousel();
 			/* 有关何时暂停轮播 start */
@@ -126,11 +137,16 @@
 	};
 	ImageCarousel.prototype.switchStyle = function(index){
 		var dom = this.dom,
+			titleList = this.titleList,
+			titleType = that.titleType,
 			switchButton = dom.childNodes[1];
 		[].forEach.call(switchButton.children,function(child,index){
 			child.classList = "";
 		});
 		switchButton.childNodes[index].classList = "activeImg";
+		if(titleType !="none"){
+			dom.childNodes[2].childNodes[0].innerHTML = titleList[index];
+		}
 	};
 	ImageCarousel.prototype.carousel = function(){
 		var sleep = this.sleep,
