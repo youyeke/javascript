@@ -1,11 +1,15 @@
 (function(window,undefined) {
+	/*
+	* by : youyeke
+	* GItHub : https://github.com/youyeke/javascript/tree/master/imageCarousel
+	*/ 
 	window.ImageCarousel = function(obj){
 		this.dom = obj.dom;
 		this.width = obj.width || 800;
 		this.height = obj.height || 450;
 		this.imageList = obj.imageList;
 		this.hrefList = obj.hrefList;
-		this.titleList = obj.titleList;
+		this.titleList = obj.titleList || [];
 		this.path = obj.path;
 		this.speed = obj.speed;
 		this.sleep = obj.sleep;
@@ -25,6 +29,7 @@
 		var that = this;
 		dom.style.width = width +"px";
 		dom.style.height = height +"px";
+		this.carousel();
 		imageList.forEach(function(url,index){
 			var img = new Image();
 			img.src = url;
@@ -53,6 +58,7 @@
 					domImageSwith += "<span>"+(index+1)+"</span>";
 				}
 			});
+			var cache = dom.innerHTML;
 			dom.innerHTML = [
 				"<ul>",
 					domImage,
@@ -64,6 +70,7 @@
 	    		"<p>"+titleList[0]+"</p>",
 	    		"</div>"
 			].join("");
+			dom.innerHTML += cache;
 			var switchImage = dom.childNodes[1];
 			var titleMap = {
 				"show" : function(){
@@ -81,7 +88,6 @@
 			(titleMap[titleType] || titleType["default"])();
 			console.log("%O",dom)
 			that.animation();//初始化方法，以便惰性选择CSS动画或是JS动画
-			that.carousel();
 			/* 有关何时暂停轮播 start */
 			dom.addEventListener("mouseover",function(){
 				that.carousel();
@@ -119,19 +125,28 @@
 		var currentIndex = 0;
 		if(animationType =="CSS"){
 			dom.childNodes[0].style.transition = "all "+speed+"ms";
-			dom.childNodes[0].style.left = "0px"
 			this.animation = function(index){
-				if(index == undefined){
-					if(currentIndex < length-1){
-						currentIndex++;
-					}else{
-						currentIndex = 0;
+				var action = {
+					"last" : function(){
+						if(currentIndex > 0){
+							currentIndex--;
+						}
+					},
+					"default" : function(){
+						if(index == undefined || index == "next"){
+							if(currentIndex < length-1){
+								currentIndex++;
+							}else{
+								currentIndex = 0;
+							}
+						}else{
+							currentIndex = index-1;
+						};
 					}
-				}else{
-					currentIndex = index-1;
-				}
+				};
+				( action[arguments[0]] || action["default"] )();
 				dom.childNodes[0].style.left = -currentIndex*width+"px";
-				this.switchStyle(currentIndex)
+				this.switchStyle(currentIndex);
 			}
 		}else{
 			this.animation = function(index){
