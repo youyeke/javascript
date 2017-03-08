@@ -47,7 +47,7 @@
 			}
 		});
 		function createDom(){
-			dom.classList +=" imageCarousel";
+			dom.className +=" imageCarousel";
 			var domImage = "",
 				domImageSwith = "";
 			imageList.forEach(function(url,index){
@@ -160,9 +160,9 @@
 			titleType = this.titleType,
 			switchButton = dom.childNodes[1];
 		[].forEach.call(switchButton.children,function(child,index){
-			child.classList = "";
+			child.className = "";
 		});
-		switchButton.childNodes[index].classList = "activeImg";
+		switchButton.childNodes[index].className = "activeImg";
 		if(titleType !="none"){
 			dom.childNodes[2].childNodes[0].innerHTML = titleList[index];
 		}
