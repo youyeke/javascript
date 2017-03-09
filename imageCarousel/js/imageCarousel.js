@@ -71,6 +71,7 @@
 	    		"</div>"
 			].join("");
 			dom.innerHTML += cache;
+			dom.childNodes[0].style.left ="0";
 			var switchImage = dom.childNodes[1];
 			var titleMap = {
 				"show" : function(){
@@ -120,7 +121,7 @@
 		var animationType = this.animationType,
 			dom = this.dom,
 			width = this.width,
-			length = this.imageList.length,
+			length = this.imageList.length-1,
 			speed = this.speed;
 		var currentIndex = 0;
 		if(animationType =="CSS"){
@@ -134,7 +135,7 @@
 					},
 					"default" : function(){
 						if(index == undefined || index == "next"){
-							if(currentIndex < length-1){
+							if(currentIndex < length){
 								currentIndex++;
 							}else{
 								currentIndex = 0;
@@ -149,8 +150,40 @@
 				this.switchStyle(currentIndex);
 			}
 		}else{
+			var framePosition =0,
+				position = 0;
 			this.animation = function(index){
-				console.log("JS",index)
+				console.log("JS",index);
+				var i = 60;
+				var action = {
+					"last" : function(){
+						if(currentIndex > 0){
+							currentIndex--;
+						}
+					},
+					"default" : function(){
+						if(index == undefined || index == "next"){
+							if(currentIndex < length){
+								currentIndex++;
+							}else{
+								currentIndex = 0;
+							}
+						}else{
+							currentIndex = index-1;
+						};
+					}
+				};
+				( action[arguments[0]] || action["default"] )();
+				this.switchStyle(currentIndex);
+				framePosition =  currentIndex == 0 ?(length*width/60):-width/60;
+				var execAnimate=function(){
+					position+=framePosition;
+					dom.childNodes[0].style.left= position +"px";
+					if(--i){
+						requestAnimationFrame(execAnimate);
+					}
+				}
+				execAnimate();
 			}
 		}
 	};
