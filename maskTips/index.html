@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>测试遮掩层</title>
+		<link href="css/maskTips.css" rel="stylesheet" />
+		<script src="js/maskTips.js"></script>
+	</head>
+	<body>
+		<input id="tips" type="button"  value="tips"/>
+		<input id="warn" type="button"  value="warn"/>
+		<input id="wait" type="button"  value="wait"/>
+		<script>
+			maskLayer.tips("警告型提示","failed");
+			maskLayer.news("等待2秒","faild",2000,function(){
+				maskLayer.tips("2秒后的回调函数");
+				maskLayer.tips("提示2");
+			});
+			document.getElementById("tips").addEventListener("click",function(){
+				maskLayer.tips("弹出普通提示");
+			});
+			document.getElementById("warn").addEventListener("click",function(){
+				maskLayer.warn("警告框，按确认才能执行回调函数",function(){
+					maskLayer.tips("233");
+				});
+			});
+			document.getElementById("wait").addEventListener("click",function(){
+				maskLayer.wait("只能一直等待下去，用户无法自行关闭。<br>请通过程序在且当的时候关闭它。<br> 调用 maskLayer.clearMask(); 即可关闭。");
+			})
+		</script>
+	</body>
+</html>
