@@ -141,7 +141,7 @@
 	};
 	UploadJS.prototype.ready = function(){
 		var upWorkFileBox = this.upWorkFileBox;
-		var that = this;
+		var self = this;
 		var fileArray = this.fileArray = [],//用户选择上传的文件列,会转换为dom供用户操作
 			uploading = this.uploading = [];//确切要上传的文件，请确保由fileArray转化成
 		upWorkFileBox.innerHTML = [
@@ -177,8 +177,8 @@
 			/*提交事件*/
 			$("upWorkFileForm").addEventListener("submit",function(e){
 				e.preventDefault();
-				that.uploading = uploading;
-				that.queryUploadedMD5();
+				self.uploading = uploading;
+				self.queryUploadedMD5();
 			})
 			function updataList(){//没想好怎么把它封装好，就暂时丢这里用着先
 				uploading = [];
@@ -198,7 +198,7 @@
 	};
 	UploadJS.prototype.queryUploadedMD5 = function(){
 		console.log(this);
-		var that = this,
+		var self = this,
 			uploading = this.uploading,
 			fileChunk = this.fileChunk,
 			fileMD5Qurey = this.fileMD5Qurey;
@@ -208,7 +208,7 @@
 					var queryData = new FormData(),
 						size = info.fileInfo.size,
 						fileEndID=Math.ceil(size/fileChunk)-1;//最后一个文件片段的ID,从0开始计数
-					that.uploading[index].fileEndID = fileEndID;
+					self.uploading[index].fileEndID = fileEndID;
 					queryData.append("md5",info.md5);
 					queryData.append("fileEndID",fileEndID);
 					var queryUploaded = new Ajax({
@@ -216,7 +216,7 @@
 						url : fileMD5Qurey,
 						data : queryData,
 						success : function(data){
-							that.uploadFile(data,index);
+							self.uploadFile(data,index);
 						}
 					});
 					queryUploaded.send();
@@ -231,7 +231,7 @@
 				notUpload=notUpload.map(function(item){  
 			    	return parseInt(item);
 				});
-				var that = this;
+				var self = this;
 				var dom = this.uploading[index].DOM;
 					tips = dom.childNodes[3];
 				var fileChunk = this.fileChunk,
@@ -248,9 +248,9 @@
 					(function(fileID,tips){
 						var endSize=(notUpload[0]==fileEndID)?size:((notUpload[0]+1)*fileChunk),
 		                	fileData= new FormData();
-		                fileData.append("file", that.uploading[index].fileInfo.slice((notUpload[0]*fileChunk),endSize));
+		                fileData.append("file", self.uploading[index].fileInfo.slice((notUpload[0]*fileChunk),endSize));
 		                fileData.append("fileID",notUpload[0]);
-		                fileData.append("md5",that.uploading[index].md5);
+		                fileData.append("md5",self.uploading[index].md5);
 		                notUpload.shift();
 		                var uploadFile = new Ajax({
 							type : "post",
@@ -260,7 +260,7 @@
 								upload++;
 								if(upload == needUpload){
 									uploadFile.progress = null;
-									that.mergeFiles(index);
+									self.mergeFiles(index);
 								}
 							},
 							failed : function(status){
@@ -288,7 +288,7 @@
 		}).call(this,data,index);
 	};
 	UploadJS.prototype.mergeFiles = function(index){
-		var that = this;
+		var self = this;
 		console.log(this.uploading[index])
 		var dom = this.uploading[index].DOM;
 			tips = dom.childNodes[3];
@@ -303,7 +303,7 @@
 			data : command,
 			success : function(data){
 				tips.innerHTML = "<font color='#0f0'>上传成功</font>";
-				console.log(that.uploading[index].fileInfo.name)
+				console.log(self.uploading[index].fileInfo.name)
 				console.log(tips)
 				console.log(data);
 			}
