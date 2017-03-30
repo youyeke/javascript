@@ -1,8 +1,8 @@
 (function(window,undefined){
 	window.FormCheck = function FormCheck(obj){
 		this.obj = obj.formObj;
-				this.callback = obj.callback;
-				this.bindList = [];
+		this.callback = obj.callback;
+		this.bindList = [];
 	}
 	FormCheck.prototype.bind = function(index,regexp,requiredMessage,failedMessage){
 		//未来需求：当文本框失去焦点后触发ajax
@@ -59,7 +59,7 @@
 		var parent = input.bindObj.parentNode,
 			child =document.createElement("label");
 		var repeat=false;
-		parent.childNodes.forEach(function(item,index){//避免重复添加
+		Array.prototype.forEach.call(parent.childNodes,function(item,index){//避免重复添加
 			if(item["localName"]=="label"){
 				repeat=true;
 			}
@@ -73,7 +73,7 @@
 	FormCheck.prototype.removeClass = function(input){
 		var parent = input.bindObj.parentNode;
 		input.bindObj.classList="";
-		parent.childNodes.forEach(function(item,index){
+		Array.prototype.forEach.call(parent.childNodes,function(item,index){
 			if(item["localName"]=="label"){
 				parent.removeChild(parent.childNodes[index]);
 			}
