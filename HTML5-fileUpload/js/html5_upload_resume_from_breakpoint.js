@@ -1,5 +1,6 @@
 //(c) Copyright 2017 youye. All Rights Reserved. 
 (function(window,undefined){
+	console.log("HTML5-fileUpload version is v1.0.1")
 	var $ = function(id){
 		return document.getElementById(id);
 	};
@@ -232,7 +233,7 @@
 			    	return parseInt(item);
 				});
 				var self = this;
-				var dom = this.uploading[index].DOM;
+				var dom = this.uploading[index].DOM,
 					tips = dom.childNodes[3];
 				var fileChunk = this.fileChunk,
 					fileEndID = this.uploading[index].fileEndID,
