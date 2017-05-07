@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>编辑时间</title>
+		<link href="css/public.css" rel="stylesheet" />
+		<script src="js/public.js"></script>
+	</head>
+	<body>
+		<div class="curriculumInfo panel panel-primary">
+	    	<div class="panel-heading">
+	    		<h3 class="panel-title">修改作业截止时间</h3>
+	    	</div>
+	    	<div>
+	    		<span>作业ID</span>
+	    		<input id="workID" type="text" autocomplete="off" />
+	    		<span>截止于</span>
+	    		<input id="time" type="text" autocomplete="off" />
+	    		<input type="button" value="确定" data-type="save-week">
+	    	</div>
+	    </div>		
+	<script>
+		var  day = new Date(2017,4,0);
+		console.log(day.getDate());
+		var InputDate = (function(){
+			var UI = (function(){
+				var DOM = null,
+					html = ['<div id="inputTime"><span><a href="" id="lastMonth"></a> 2017-05 <a href="" id="nextMonth"></a></span>',
+				    		'<table>',
+				    			'<tr>',
+				    				'<td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td><td>日</td>',
+				    			'</tr>'
+				    		].join("");
+				html += createDay(35);
+				function createDay(end){
+					var html = '';
+					for(var i = 0;i < end; i++){
+						if(i%7 == 0){
+							html += '<tr>';
+						}
+						html += '<td id="day'+ i +'">'+i+'</td>';
+						if(i%7 == 6){
+							html += '</tr>';
+						}
+					}
+					return html;
+				}
+				var create = function(){
+					var div = document.createElement('div');
+					div.innerHTML = html;
+					DOM = div;
+					return div;
+				}
+				return function(){
+					if(DOM === null){
+						var dom = create()
+						dom.style.display = "none";
+						return document.body.appendChild(dom);
+					}else{
+						return DOM;
+					}
+				};
+			})();
+			var listenList = [];
+			var echoUI = function(){
+				UI().style.display = "block";
+			},
+				hideUI = function(){
+				UI().style.display = "none";
+			}
+			var bind = function(dom){
+				if(dom.tagName == 'INPUT' && dom.type == 'text'){
+					dom.addEventListener("focus",echoUI);
+					UI().addEventListener("click",hideUI);
+				}
+			};
+			return {bind};
+		})();
+		var inputTime = document.getElementById("time");
+		InputDate.bind(inputTime);
+	</script>
+	</body>
+</html>
