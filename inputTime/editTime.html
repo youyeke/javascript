@@ -4,7 +4,6 @@
 		<meta charset="UTF-8">
 		<title>编辑时间</title>
 		<link href="css/public.css" rel="stylesheet" />
-		<script src="js/public.js"></script>
 	</head>
 	<body>
 		<div class="curriculumInfo panel panel-primary">
@@ -22,7 +21,7 @@
 	<script>
 		var  day = new Date(2017,4,0);
 		console.log(day.getDate());
-		var InputDate = (function(){
+		var InputData = (function(){
 			var UI = (function(){
 				var DOM = null,
 					html = ['<div id="inputTime"><span><a href="" id="lastMonth"></a> 2017-05 <a href="" id="nextMonth"></a></span>',
@@ -53,7 +52,7 @@
 				}
 				return function(){
 					if(DOM === null){
-						var dom = create()
+						var dom = create();
 						dom.style.display = "none";
 						return document.body.appendChild(dom);
 					}else{
@@ -61,7 +60,23 @@
 					}
 				};
 			})();
-			var listenList = [];
+			var dayList = []; //存放着35个用于显示天数的DOM
+			
+			var init = function(){
+				var year = new Date().getFullYear(),
+					month = new Date().getMonth(),
+					day = new Date().getDate();
+				var lastMD = new Date(year,month,0).getDate(), //上个月共有几天
+					nowMD =  new Date(year,month+1,0).getDate(); //本月共有几天
+				var monthStart = new Date(year,month,1).getDay(); //本月1号是星期几
+				setTimeout(function(){ //初始化 dayList
+					for(var i = 0;i < 35; i++){
+						dayList.push(document.getElementById("day"+i));
+					}
+				},0);
+				console.log(dayList);
+				console.log(lastMD,nowMD,monthStart);
+			};
 			var echoUI = function(){
 				UI().style.display = "block";
 			},
@@ -74,10 +89,11 @@
 					UI().addEventListener("click",hideUI);
 				}
 			};
+			init()
 			return {bind};
 		})();
 		var inputTime = document.getElementById("time");
-		InputDate.bind(inputTime);
+		InputData.bind(inputTime);
 	</script>
 	</body>
 </html>
