@@ -37,7 +37,7 @@
 						if(i%7 == 0){
 							html += '<tr>';
 						}
-						html += '<td id="day'+ i +'">'+i+'</td>';
+						html += '<td id="day'+ i +'"></td>';
 						if(i%7 == 6){
 							html += '</tr>';
 						}
@@ -59,8 +59,20 @@
 						return DOM;
 					}
 				};
+			})(); // UI end
+			var dayList = (function(){
+				var list = []; //存放着35个用于显示天数的 DOM
+				var init = function(obj){
+					list.push(obj);
+				}
+				var update = function(index,n){
+					return list[index].innerHTML = n;
+				}
+				return {
+					init : init,
+					update : update
+				};
 			})();
-			var dayList = []; //存放着35个用于显示天数的DOM
 			
 			var init = function(){
 				var year = new Date().getFullYear(),
@@ -71,7 +83,16 @@
 				var monthStart = new Date(year,month,1).getDay(); //本月1号是星期几
 				setTimeout(function(){ //初始化 dayList
 					for(var i = 0;i < 35; i++){
-						dayList.push(document.getElementById("day"+i));
+						dayList.init(document.getElementById("day"+i));
+					}
+					for(var i = 0; i < monthStart -1; i++){ //填充上月
+						dayList.update(i,lastMD -(monthStart - i) + 2);
+					}
+					for(var i = monthStart -1 ; i < nowMD + monthStart ; i++){ //填充本月
+						dayList.update(i,i - monthStart + 2);
+					}
+					for(var i = nowMD + monthStart -1; i < 35; i++){ //填充下月
+						dayList.update(i,i - nowMD - monthStart +2);
 					}
 				},0);
 				console.log(dayList);
