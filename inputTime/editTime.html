@@ -65,39 +65,66 @@
 				var init = function(obj){
 					list.push(obj);
 				}
-				var update = function(index,n){
-					return list[index].innerHTML = n;
+				var update = function(index,n){ //负责操作 dom 的内容
+					if(!list.length > 0 || index >= 35){
+						return;
+					}
+					return list[index].innerText = n; //能不用 innerHTML 就别用
 				}
 				return {
 					init : init,
 					update : update
 				};
 			})();
-			
+			var time = {}; //存放显示日历时所需要的时间数据
+			var computeTime = function(){
+				time.lastMD = new Date(time.year,time.month,0).getDate(); //上个月共有几天
+				time.nowMD =  new Date(time.year,time.month+1,0).getDate(); //本月共有几天
+				time.monthStart = new Date(time.year,time.month,1).getDay(); //本月1号是星期几
+				console.log(time.lastMD,time.nowMD,time.monthStart);
+			}
 			var init = function(){
-				var year = new Date().getFullYear(),
-					month = new Date().getMonth(),
-					day = new Date().getDate();
-				var lastMD = new Date(year,month,0).getDate(), //上个月共有几天
-					nowMD =  new Date(year,month+1,0).getDate(); //本月共有几天
-				var monthStart = new Date(year,month,1).getDay(); //本月1号是星期几
-				setTimeout(function(){ //初始化 dayList
-					for(var i = 0;i < 35; i++){
+				time.year = new Date().getFullYear();
+				time.month = new Date().getMonth();
+				time.day = new Date().getDate();
+				setTimeout(function(){
+					for(var i = 0;i < 35; i++){ //初始化 dayList
 						dayList.init(document.getElementById("day"+i));
 					}
-					for(var i = 0; i < monthStart -1; i++){ //填充上月
-						dayList.update(i,lastMD -(monthStart - i) + 2);
-					}
-					for(var i = monthStart -1 ; i < nowMD + monthStart ; i++){ //填充本月
-						dayList.update(i,i - monthStart + 2);
-					}
-					for(var i = nowMD + monthStart -1; i < 35; i++){ //填充下月
-						dayList.update(i,i - nowMD - monthStart +2);
-					}
 				},0);
-				console.log(dayList);
-				console.log(lastMD,nowMD,monthStart);
+				command();
 			};
+			var depict = function(){ //负责描述35天具体是几号
+				for(var i = 0; i < time.monthStart -1; i++){ //填充上月
+					dayList.update(i,time.lastMD -(time.monthStart - i) + 2);
+				}
+				for(var i = time.monthStart -1 ; i < time.nowMD + time.monthStart ; i++){ //填充本月
+					dayList.update(i,i - time.monthStart + 2);
+				}
+				for(var i = time.nowMD + time.monthStart -1; i < 35; i++){ //填充下月
+					dayList.update(i,i - time.nowMD - time.monthStart +2);
+				}
+				
+			};
+			function command(){
+				setTimeout(function(){
+					computeTime();
+					depict();
+				},0);
+			}
+			var cutover = function(n){ // -1 or 0 or 1
+				time.month += n;
+				if(time.month > 11){
+					time.month = 0;
+					time.year++;
+				}
+				if(time.month < 0){
+					time.month = 12;
+					time.year--;
+				}
+				//command();
+				console.log(time.year,time.month);
+			}
 			var echoUI = function(){
 				UI().style.display = "block";
 			},
@@ -111,10 +138,14 @@
 				}
 			};
 			init()
-			return {bind};
+			return {
+				bind : bind,
+				cutover : cutover
+			};
 		})();
 		var inputTime = document.getElementById("time");
 		InputData.bind(inputTime);
+		InputData.cutover(-1);
 	</script>
 	</body>
 </html>
