@@ -22,7 +22,8 @@
 		var InputData = (function(){
 			var UI = (function(){
 				var DOM = null,
-					html = ['<div id="inputTime"><span><a href="" id="lastMonth"></a> 2017-05 <a href="" id="nextMonth"></a></span>',
+					html = ['<span><a href="" id="lastMonth"></a> <span id="nowMonth">--/--</span>',
+							'<a href="" id="nextMonth"></a></span><div></div>',
 				    		'<table>',
 				    			'<tr>',
 				    				'<td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td><td>日</td>',
@@ -44,6 +45,7 @@
 				}
 				var create = function(){
 					var div = document.createElement('div');
+					div.id = 'inputTime';
 					div.innerHTML = html;
 					DOM = div;
 					return div;
@@ -69,9 +71,13 @@
 					}
 					return list[index].innerText = n; //能不用 innerHTML 就别用
 				}
+				var changeStyle = function(index,className){
+					list[index].className = className;
+				}
 				return {
 					init : init,
-					update : update
+					update : update,
+					changeStyle : changeStyle
 				};
 			})();
 			var time = {}; //存放显示日历时所需要的时间数据
@@ -79,10 +85,9 @@
 				time.lastMD = new Date(time.year,time.month,0).getDate(); //上个月共有几天
 				time.nowMD =  new Date(time.year,time.month+1,0).getDate(); //本月共有几天
 				time.monthStart = new Date(time.year,time.month,1).getDay(); //本月1号是星期几(0 - 6)
-			if(time.monthStart === 0){
-				time.monthStart = 7;
-			}
-			console.log(time.lastMD,time.nowMD,time.monthStart);
+				if(time.monthStart === 0){
+					time.monthStart = 7;
+				}
 			}
 			var init = function(){
 				time.year = new Date().getFullYear();
@@ -98,19 +103,29 @@
 			var depict = function(){ //负责描述35天具体是几号
 				for(var i = 0; i < time.monthStart -1; i++){ //填充上月
 					dayList.update(i,time.lastMD -(time.monthStart - i) + 2);
+					dayList.changeStyle(i,"gray");
 				}
 				for(var i = time.monthStart -1 ; i < time.nowMD + time.monthStart ; i++){ //填充本月
 					dayList.update(i,i - time.monthStart + 2);
 				}
 				for(var i = time.nowMD + time.monthStart -1; i < 35; i++){ //填充下月
 					dayList.update(i,i - time.nowMD - time.monthStart + 2);
+					dayList.changeStyle(i,"gray");
 				}
 				
+			};
+			var depictTitle = function(){
+				var nowMD_DOM = document.getElementById('nowMonth');
+				return function(){
+					nowMD_DOM.innerText = time.year +' - '+ (time.month + 1) + ' ';
+					return;
+				}
 			};
 			function command(){
 				setTimeout(function(){
 					computeTime();
 					depict();
+					depictTitle()(); //因为这个函数不能用匿名立执行，所以只能这样
 				},0);
 			}
 			var cutover = function(n){ // -1 or 0 or 1
@@ -146,9 +161,7 @@
 		})();
 		var inputTime = document.getElementById("time");
 		InputData.bind(inputTime);
-		InputData.cutover(-1);
-		InputData.cutover(-1);
-		InputData.cutover(-1);
+		InputData.cutover(1);//往下切一个月
 	</script>
 	</body>
 </html>

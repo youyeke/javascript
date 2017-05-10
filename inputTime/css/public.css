@@ -1,122 +1,23 @@
-/*
-   public.css
-	存放各种插件的样式
-   Copyright 2017 youye. All rights reserved.
-*/
-#maskBackground{
-	width: 100%;
-	height: 100%;
-	font-size: 16px;
-	background-color: hsla(0,0%,0%,0.5);
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 10;
-}
-#maskBackground>div{
-	width: 400px;
-	min-height: 5em;
-	background-color: white;
-	position: fixed;
-	top: 20%;
-	left: calc(50% - 200px);
-	text-align: center;
-	padding-bottom: 1em;
-}
-#maskBackground div p:first-child{
-	background-color: #428bca;
-	padding: 0.5em;
-	color: white;
-	margin: 0 0 16px 0;
-}
-#maskBackground div.failed p:first-child{
-	background-color: hsl(0,80%,60%);
-}
-#maskBackground div span input[type="button"]{
-	border: 1px #428bca solid;
-	background-color: white;
-}
-#maskBackground div.failed span input[type="button"]{
-	border: 1px #428bca solid;
-	background-color: white;
-	margin: 0 1em;
-}
-#maskBackground div.success p:first-child{
-	background-color: hsl(120,50%,60%);
-}
-.icon-file-30px{
-	display: inline-block;
-	width: 30px;
-	height: 30px;
-	background-image: url(../img/icon-file-30px.png);
-	background-repeat: no-repeat;
-	vertical-align: middle;
-}
-.icon-file-30px-doc{background-position: 0 0;}
-.icon-file-30px-ppt{background-position: -30px 0;}
-.icon-file-30px-xls{background-position: -60px 0;}
-.icon-file-30px-img{background-position: 0 -30px;}
-.icon-file-30px-video{background-position: -30px -30px;}
-.icon-file-30px-txt{background-position: -60px -30px;}
-.icon-file-30px-zip{background-position: 0 -60px;}
-.icon-file-30px-rar{background-position: -30px -60px;}
-.icon-file-30px-file{background-position: -60px -60px;}
-/*雪碧icon END*/
-.left-nav{
-	padding: 1em 2em;
-	width: 100%;
-}
-.left-nav li{
-	text-decoration: blink;
-	display: block;
-	box-sizing: content-box;
-	padding: 0.5em;
-	text-indent: 1em;
-	border-left:6px #fff solid;
-}
-.left-nav li.active{
-	background-color: #d9edf7;
-	border-left:6px #31708f solid;
-}
-.left-nav li a{
-	display: block;
-}
-.button{
-	border: 1px solid #31708f;
-	background-color: white;
-	font-size: 16px;
-	line-height: 22px;
-	transition: all 0.5s;
-	padding: 5px 16px;
-	color: #000;
-}
-.button:hover{
-	background-color: #31708f;
-	color: white !important;
-	border: 1px solid white;
-}
-/*表单验证样式*/
-.input-error{
-	outline: 1px #f00 solid;
-	color: #f00;
-	margin-bottom: 1px;
-}
-.input-error-Message{
-	position: absolute;
-    top: 5px;
-    right: 5px;
-	color: #f00;
-	font-size: 12px;
-}
 /*日期选择插件样式*/
 #inputTime{
 	width: 14em;
 	text-align: center;
+	padding: 1em;
+	position: absolute;
+	z-index: 9;
 }
-#inputTime span{
-	width: 100%;
-	display: block;
-	position: relative;
+#inputTime>span{
+	width: 8em;
+	display: inline-block;
+	margin: 0.5em 0;
+}
+#inputTime>div{
+	width: 16em;
+	height: 31px;
+	background-color: #0ff;
+	position: absolute;
+	left: 0;
+	z-index: -1;
 }
 #inputTime #lastMonth{
 	content: '';
@@ -126,6 +27,11 @@
 	border: 10px solid transparent;
 	border-right-color: #0ff;
 	vertical-align: middle;
+	float: left;
+}
+#inputTime #nowMonth{
+	line-height: 20px;
+	display: inline-block;
 }
 #inputTime #nextMonth{
 	content: '';
@@ -135,89 +41,18 @@
 	border: 10px solid transparent;
 	border-left-color: #0ff;
 	vertical-align: middle;
+	float: right;
+}
+#inputTime table{
+	border-collapse: collapse;
 }
 #inputTime table td{
 	width: 2em;
+	padding: 0.35em;
 }
-/*加载动画 start */
-#preloader_1{
-	position: relative;
-	padding-top: 45px;
-    left: calc(50% - 25px);
-    bottom: 24px;
+#inputTime table tr:first-child{
+	color: #000;
 }
-#preloader_1 span{
-	display:block;
-	bottom:0px;
-	width: 9px;
-	height: 5px;
-	background:#9b59b6;
-	position:absolute;
--webkit-animation: preloader_1 1.5s	 infinite ease-in-out;
--moz-animation: preloader_1 1.5s	 infinite ease-in-out;
--ms-animation: preloader_1 1.5s	 infinite ease-in-out;
--o-animation: preloader_1 1.5s	 infinite ease-in-out;
-animation: preloader_1 1.5s	 infinite ease-in-out;
-
+#inputTime table td.gray{
+	color: #aaa;
 }
-#preloader_1 span:nth-child(2){
-left:11px;
--webkit-animation-delay: .2s;
--moz-animation-delay: .2s;
--ms-animation-delay: .2s;
--o-animation-delay: .2s;
-animation-delay: .2s;
-
-}
-#preloader_1 span:nth-child(3){
-left:22px;
--webkit-animation-delay: .4s;
--moz-animation-delay: .4s;
--ms-animation-delay: .4s;
--o-animation-delay: .4s;
-animation-delay: .4s;
-}
-#preloader_1 span:nth-child(4){
-left:33px;
--webkit-animation-delay: .6s;
--moz-animation-delay: .6s;
--ms-animation-delay: .6s;
--o-animation-delay: .6s;
-animation-delay: .6s;
-}
-#preloader_1 span:nth-child(5){
-left:44px;
--webkit-animation-delay: .8s;
--moz-animation-delay: .8s;
--ms-animation-delay: .8s;
--o-animation-delay: .8s;
-animation-delay: .8s;
-}
-@-webkit-keyframes preloader_1 {
-    0% {height:5px;-webkit-transform:translateY(0px);background:#9b59b6;}
-    25% {height:30px;-webkit-transform:translateY(15px);background:#3498db;}
-    50% {height:5px;-webkit-transform:translateY(0px);background:#9b59b6;}
-    100% {height:5px;-webkit-transform:translateY(0px);background:#9b59b6;}
-}
-
-@-moz-keyframes preloader_1 {
-    0% {height:5px;-moz-transform:translateY(0px);background:#9b59b6;}
-    25% {height:30px;-moz-transform:translateY(15px);background:#3498db;}
-    50% {height:5px;-moz-transform:translateY(0px);background:#9b59b6;}
-    100% {height:5px;-moz-transform:translateY(0px);background:#9b59b6;}
-}
-
-@-ms-keyframes preloader_1 {
-    0% {height:5px;-ms-transform:translateY(0px);background:#9b59b6;}
-    25% {height:30px;-ms-transform:translateY(15px);background:#3498db;}
-    50% {height:5px;-ms-transform:translateY(0px);background:#9b59b6;}
-    100% {height:5px;-ms-transform:translateY(0px);background:#9b59b6;}
-}
-
-@keyframes preloader_1 {
-    0% {height:5px;transform:translateY(0px);background:#9b59b6;}
-    25% {height:30px;transform:translateY(15px);background:#3498db;}
-    50% {height:5px;transform:translateY(0px);background:#9b59b6;}
-    100% {height:5px;transform:translateY(0px);background:#9b59b6;}
-}
-/*加载动画 END */
