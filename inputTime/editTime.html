@@ -19,8 +19,6 @@
 	    	</div>
 	    </div>		
 	<script>
-		var  day = new Date(2017,4,0);
-		console.log(day.getDate());
 		var InputData = (function(){
 			var UI = (function(){
 				var DOM = null,
@@ -80,8 +78,11 @@
 			var computeTime = function(){
 				time.lastMD = new Date(time.year,time.month,0).getDate(); //上个月共有几天
 				time.nowMD =  new Date(time.year,time.month+1,0).getDate(); //本月共有几天
-				time.monthStart = new Date(time.year,time.month,1).getDay(); //本月1号是星期几
-				console.log(time.lastMD,time.nowMD,time.monthStart);
+				time.monthStart = new Date(time.year,time.month,1).getDay(); //本月1号是星期几(0 - 6)
+			if(time.monthStart === 0){
+				time.monthStart = 7;
+			}
+			console.log(time.lastMD,time.nowMD,time.monthStart);
 			}
 			var init = function(){
 				time.year = new Date().getFullYear();
@@ -102,7 +103,7 @@
 					dayList.update(i,i - time.monthStart + 2);
 				}
 				for(var i = time.nowMD + time.monthStart -1; i < 35; i++){ //填充下月
-					dayList.update(i,i - time.nowMD - time.monthStart +2);
+					dayList.update(i,i - time.nowMD - time.monthStart + 2);
 				}
 				
 			};
@@ -119,11 +120,11 @@
 					time.year++;
 				}
 				if(time.month < 0){
-					time.month = 12;
+					time.month = 11;
 					time.year--;
 				}
-				//command();
-				console.log(time.year,time.month);
+				command();
+				console.log(time.year,time.month+1);
 			}
 			var echoUI = function(){
 				UI().style.display = "block";
@@ -145,6 +146,8 @@
 		})();
 		var inputTime = document.getElementById("time");
 		InputData.bind(inputTime);
+		InputData.cutover(-1);
+		InputData.cutover(-1);
 		InputData.cutover(-1);
 	</script>
 	</body>
