@@ -13,3 +13,7 @@
 ## 登陆表单验证
 
 > 点击前往该组件 ：https://github.com/youyeke/javascript/tree/master/loginFormCheck
+
+## 遮罩型弹出提示
+
+> 点击前往该组件 ：https://github.com/youyeke/javascript/tree/master/maskTips
