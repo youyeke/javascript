@@ -108,6 +108,7 @@
 				}
 				for(var i = time.monthStart -1 ; i < time.nowMD + time.monthStart ; i++){ //填充本月
 					dayList.update(i,i - time.monthStart + 2);
+					dayList.changeStyle(i,"");
 				}
 				for(var i = time.nowMD + time.monthStart -1; i < 35; i++){ //填充下月
 					dayList.update(i,i - time.nowMD - time.monthStart + 2);
