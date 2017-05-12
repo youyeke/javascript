@@ -19,11 +19,11 @@
 	    	</div>
 	    </div>		
 	<script>
-		var InputData = (function(){
+		var InputDate = (function(){
 			var UI = (function(){
 				var DOM = null,
-					html = ['<span><a href="" id="lastMonth"></a> <span id="nowMonth">--/--</span>',
-							'<a href="" id="nextMonth"></a></span><div></div>',
+					html = ['<span><a href="javascript:;" id="lastMonth" data-type="last"></a> <span id="nowMonth">--/--</span>',
+							'<a href="javascript:;" id="nextMonth" data-type="next"></a></span><div></div>',
 				    		'<table>',
 				    			'<tr>',
 				    				'<td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td><td>日</td>',
@@ -139,11 +139,17 @@
 					time.year--;
 				}
 				command();
-				console.log(time.year,time.month+1);
+				//console.log(time.year,time.month+1);
 			}
 			var clickEvent = function(e){ //全部点击事件的处理
 				var type = e.target.dataset.type;
 				var typeMap = {
+					'last' : function(){
+						InputDate.cutover(-1);
+					},
+					'next' : function(){
+						InputDate.cutover(1);
+					},
 					'day' : function(){
 						console.log(e.target.innerText);
 					},
@@ -170,8 +176,7 @@
 			};
 		})();
 		var inputTime = document.getElementById("time");
-		InputData.bind(inputTime);
-		InputData.cutover(1);//往下切一个月
+		InputDate.bind(inputTime);
 	</script>
 	</body>
 </html>
