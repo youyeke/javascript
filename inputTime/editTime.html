@@ -36,7 +36,7 @@
 						if(i%7 == 0){
 							html += '<tr>';
 						}
-						html += '<td id="day'+ i +'"></td>';
+						html += '<td id="day'+ i +'" data-type="day"></td>';
 						if(i%7 == 6){
 							html += '</tr>';
 						}
@@ -50,7 +50,7 @@
 					DOM = div;
 					return div;
 				}
-				return function(){
+				return (function(){
 					if(DOM === null){
 						var dom = create();
 						dom.style.display = "none";
@@ -58,7 +58,7 @@
 					}else{
 						return DOM;
 					}
-				};
+				})();
 			})(); // UI end
 			var dayList = (function(){
 				var list = []; //存放着35个用于显示天数的 DOM
@@ -97,8 +97,8 @@
 					for(var i = 0;i < 35; i++){ //初始化 dayList
 						dayList.init(document.getElementById("day"+i));
 					}
+					command();
 				},0);
-				command();
 			};
 			var depict = function(){ //负责描述35天具体是几号
 				for(var i = 0; i < time.monthStart -1; i++){ //填充上月
@@ -141,16 +141,26 @@
 				command();
 				console.log(time.year,time.month+1);
 			}
+			var clickEvent = function(e){ //全部点击事件的处理
+				var type = e.target.dataset.type;
+				var typeMap = {
+					'day' : function(){
+						console.log(e.target.innerText);
+					},
+					'default' : function(){;}
+				};
+				(typeMap[type] || typeMap['default'])();
+			}
 			var echoUI = function(){
-				UI().style.display = "block";
+				UI.style.display = "block";
 			},
 				hideUI = function(){
-				UI().style.display = "none";
+				UI.style.display = "none";
 			}
 			var bind = function(dom){
 				if(dom.tagName == 'INPUT' && dom.type == 'text'){
 					dom.addEventListener("focus",echoUI);
-					UI().addEventListener("click",hideUI);
+					UI.addEventListener("click",clickEvent);
 				}
 			};
 			init()

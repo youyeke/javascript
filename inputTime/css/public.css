@@ -4,6 +4,8 @@
 	text-align: center;
 	padding: 1em;
 	position: absolute;
+	border: 2px solid #eaeaea;
+	cursor: default;
 	z-index: 9;
 }
 #inputTime>span{
@@ -49,9 +51,6 @@
 #inputTime table td{
 	width: 2em;
 	padding: 0.35em;
-}
-#inputTime table tr:first-child{
-	color: #000;
 }
 #inputTime table td.gray{
 	color: #aaa;
