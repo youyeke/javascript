@@ -16,6 +16,7 @@
 	    		<span>截止于</span>
 	    		<input id="time" type="text" autocomplete="off" />
 	    		<input type="button" value="确定" data-type="save-week">
+	    		<input id="time2" type="text" autocomplete="off" />
 	    	</div>
 	    </div>		
 	<script>
@@ -114,18 +115,18 @@
 				}
 				
 			};
-			var depictTitle = function(){
+			var depictTitle = (function(){
 				var nowMD_DOM = document.getElementById('nowMonth');
 				return function(){
 					nowMD_DOM.innerText = time.year +' - '+ (time.month + 1) + ' ';
 					return;
 				}
-			};
+			})();
 			function command(){
 				setTimeout(function(){
 					computeTime();
 					depict();
-					depictTitle()(); //因为这个函数不能用匿名立执行，所以只能这样
+					depictTitle();
 				},0);
 			}
 			var cutover = function(n){ // -1 or 0 or 1
@@ -141,6 +142,19 @@
 				command();
 				//console.log(time.year,time.month+1);
 			}
+			var exportTime = (function(){
+				var exportDOM = null;
+				var setDOM = function(dom){
+					exportDOM = dom;
+				};
+				var setValue = function(value){
+					exportDOM.value = value;
+				};
+				return {
+					setDOM : setDOM,
+					setValue : setValue
+				}
+			})();
 			var clickEvent = function(e){ //全部点击事件的处理
 				var type = e.target.dataset.type;
 				var typeMap = {
@@ -151,18 +165,21 @@
 						InputDate.cutover(1);
 					},
 					'day' : function(){
-						console.log(e.target.innerText);
+						var value = time.year + '-' + ( time.month + 1) + '-' +  e.target.innerText;
+						exportTime.setValue(value);
+						hideUI();
 					},
 					'default' : function(){;}
 				};
 				(typeMap[type] || typeMap['default'])();
 			}
 			var echoUI = function(){
+				exportTime.setDOM(this);
 				UI.style.display = "block";
 			},
 				hideUI = function(){
 				UI.style.display = "none";
-			}
+			};
 			var bind = function(dom){
 				if(dom.tagName == 'INPUT' && dom.type == 'text'){
 					dom.addEventListener("focus",echoUI);
@@ -177,6 +194,8 @@
 		})();
 		var inputTime = document.getElementById("time");
 		InputDate.bind(inputTime);
+		var inputTime2 = document.getElementById("time2");
+		InputDate.bind(inputTime2);
 	</script>
 	</body>
 </html>
