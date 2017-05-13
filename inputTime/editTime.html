@@ -192,6 +192,13 @@
 				if(dom.tagName == 'INPUT' && dom.type == 'text'){
 					dom.addEventListener("focus",getFocus);
 					UI.addEventListener("click",clickEvent);
+					UI.addEventListener("mouseout",function(e){
+						var contain = UI.compareDocumentPosition(e.relatedTarget);
+						// contain == 0 表明是同一节点， contain == 20 是 UI 的后代
+						if(contain !== 20 && contain !==0 ){
+							hideUI();
+						}
+					})
 				}
 			};
 			init()
