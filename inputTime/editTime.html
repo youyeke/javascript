@@ -73,7 +73,9 @@
 					return list[index].innerText = n; //能不用 innerHTML 就别用
 				}
 				var changeStyle = function(index,className){
-					list[index].className = className;
+					if(index < 35){
+						list[index].className = className;
+					}
 				}
 				return {
 					init : init,
@@ -173,9 +175,14 @@
 					'default' : function(){;}
 				};
 				(typeMap[type] || typeMap['default'])();
-			}
-			var echoUI = function(){
+			};
+			var getFocus = function(){
 				exportTime.setDOM(this);
+				UI.style.left = this.offsetLeft + 'px';
+				UI.style.top = this.offsetHeight + this.offsetTop + 'px';
+				echoUI();
+			};
+			var echoUI = function(){
 				UI.style.display = "block";
 			},
 				hideUI = function(){
@@ -183,7 +190,7 @@
 			};
 			var bind = function(dom){
 				if(dom.tagName == 'INPUT' && dom.type == 'text'){
-					dom.addEventListener("focus",echoUI);
+					dom.addEventListener("focus",getFocus);
 					UI.addEventListener("click",clickEvent);
 				}
 			};
