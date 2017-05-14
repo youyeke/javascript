@@ -17,3 +17,7 @@
 ## 遮罩型弹出提示
 
 > 点击前往该组件 ：https://github.com/youyeke/javascript/tree/master/maskTips
+
+## 日期输入
+
+> 点击前往该组件 ：https://github.com/youyeke/javascript/tree/master/inputTime
