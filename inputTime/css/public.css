@@ -55,3 +55,6 @@
 #inputTime table td.gray{
 	color: #aaa;
 }
+#inputTime table td.blueBorder{
+	border: #0ff 1px solid;
+}
