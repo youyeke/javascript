@@ -1,5 +1,5 @@
 /*日期选择插件样式*/
-#inputTime{
+#inputDate{
 	width: 14em;
 	text-align: center;
 	padding: 1em;
@@ -8,12 +8,12 @@
 	cursor: default;
 	z-index: 9;
 }
-#inputTime>span{
+#inputDate>span{
 	width: 8em;
 	display: inline-block;
 	margin: 0.5em 0;
 }
-#inputTime>div{
+#inputDate>div.line{
 	width: 16em;
 	height: 31px;
 	background-color: #0ff;
@@ -21,7 +21,7 @@
 	left: 0;
 	z-index: -1;
 }
-#inputTime #lastMonth{
+#inputDate #lastMonth{
 	content: '';
 	display: inline-block;
 	width: 0;
@@ -31,11 +31,11 @@
 	vertical-align: middle;
 	float: left;
 }
-#inputTime #nowMonth{
+#inputDate #nowMonth{
 	line-height: 20px;
 	display: inline-block;
 }
-#inputTime #nextMonth{
+#inputDate #nextMonth{
 	content: '';
 	display: inline-block;
 	width: 0;
@@ -45,16 +45,30 @@
 	vertical-align: middle;
 	float: right;
 }
-#inputTime table{
+#inputDate table{
 	border-collapse: collapse;
 }
-#inputTime table td{
+#inputDate table td{
 	width: 2em;
 	padding: 0.35em;
 }
-#inputTime table td.gray{
+#inputDate table td.gray{
 	color: #aaa;
 }
-#inputTime table td.blueBorder{
+#inputDate table td.blueBorder{
 	border: #0ff 1px solid;
+}
+#inputDate #inputTime{
+	color: #f00;
+}
+#inputDate #inputTime input[type="text"]{
+	width: 2em;
+	display: inline-block;
+}
+#inputDate #inputTime a{
+	color: #0cc;
+	text-decoration: none;
+	display: inline-block;
+	width: 2em;
+	vertical-align: bottom;
 }

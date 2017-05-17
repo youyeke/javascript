@@ -24,7 +24,7 @@
 			var UI = (function(){
 				var DOM = null,
 					html = ['<span><a href="javascript:;" id="lastMonth" data-type="last"></a> <span id="nowMonth">--/--</span>',
-							'<a href="javascript:;" id="nextMonth" data-type="next"></a></span><div></div>',
+							'<a href="javascript:;" id="nextMonth" data-type="next"></a></span><div class="line"></div>',
 				    		'<table>',
 				    			'<tr>',
 				    				'<td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td><td>日</td>',
@@ -45,16 +45,20 @@
 					return html;
 				}
 				var create = function(){
-					var div = document.createElement('div');
-					div.id = 'inputTime';
-					div.innerHTML = html;
-					DOM = div;
-					return div;
+					var inputDate = document.createElement('div');
+					inputDate.id = 'inputDate';
+					inputDate.innerHTML = html;
+					var inputTime = document.createElement('div');
+					inputTime.id = 'inputTime';
+					inputTime.innerHTML = '<span><a href="javascript:;">-5 </a><input type="text"><a href="javascript:;">+5</a></span>';
+					inputDate.appendChild(inputTime);
+					DOM = inputDate;
+					return inputDate;
 				}
 				return (function(){
 					if(DOM === null){
 						var dom = create();
-						dom.style.display = "none";
+						//dom.style.display = "none";
 						return document.body.appendChild(dom);
 					}else{
 						return DOM;
