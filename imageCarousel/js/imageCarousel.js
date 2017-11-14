@@ -5,8 +5,8 @@
 	*/ 
 	window.ImageCarousel = function(obj){
 		this.dom = obj.dom;
-		this.width = obj.width || 800;
-		this.height = obj.height || 450;
+		this.width = obj.dom.clientWidth;
+		this.height = obj.dom.clientHeight;
 		this.imageList = obj.imageList;
 		this.hrefList = obj.hrefList;
 		this.titleList = obj.titleList || [];
@@ -34,9 +34,9 @@
 			var img = new Image();
 			img.src = url;
 			if(img.complete){
-				imageCacheCompleteAmount++;
+				//imageCacheCompleteAmount++;
 				console.log("cache:",img)
-				return ;
+				//return ;
 			}
 			img.onload = function(){
 				imageCacheCompleteAmount++;
@@ -48,10 +48,11 @@
 		});
 		function createDom(){
 			dom.className +=" imageCarousel";
+			//dom.style.width = imageList.length * width +'px';
 			var domImage = "",
 				domImageSwith = "";
 			imageList.forEach(function(url,index){
-				domImage += "<li><a href="+hrefList[index]+"><img src="+url+"></a></li>";
+				domImage += '<li style="width:'+ width +'px"><a href="'+ hrefList[index] +'"><img src="'+ url +'"></a></li>';
 				if(index ==0){
 					domImageSwith += "<span class=\"activeImg\">"+(index+1)+"</span>";
 				}else{
@@ -87,7 +88,6 @@
 				}
 			};
 			(titleMap[titleType] || titleType["default"])();
-			console.log("%O",dom)
 			that.animation();//初始化方法，以便惰性选择CSS动画或是JS动画
 			/* 有关何时暂停轮播 start */
 			dom.addEventListener("mouseover",function(){

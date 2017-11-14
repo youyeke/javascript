@@ -1,11 +1,11 @@
 .imageCarousel{
-	width:800px;
-	height:450px;
+	width: 100%;
+	min-height:250px;
 	position: relative;
 	overflow:hidden;
 }
 .imageCarousel ul{
-	width:3200px;
+	min-width:3200px;
 	position: relative;
 	padding: 0;
 }
@@ -14,8 +14,7 @@
 	float: left;
 }
 .imageCarousel ul li img{
-	width:800px;
-	height:450px;
+	width: 100%;
 	transition: all 0.5s;
 }
 .IC-switchImg{
