@@ -94,14 +94,14 @@
         oLi.removeChild(oDiv);
     }
     AjaxTreeview.prototype.ajax = function(oLi,key,parentID){
+        var data = {};
+        data[this.key] = key;
+        data[this.parentKey] = parentID;
         $.ajax({
             url: this.url,
             type: 'get',
             context: this,
-            data:{
-                [this.key]: key,
-                [this.parentKey]: parentID
-            },
+            data:data,
             success: function(d){
                 this.removeLoad(oLi);
                 this.draw(oLi,d.data);
