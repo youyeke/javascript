@@ -33,9 +33,9 @@
             context: this,
             data: this.data,
             success: function(d){
-                this.lastPage = d[this.lastPageKey];
+                this.lastPage = Number.parseInt(d[this.lastPageKey]);
                 if(d[this.pageKey]){//如果后端有传当前的页码，以后端传的为准
-                    this.page = d[this.pageKey];
+                    this.page = Number.parseInt(d[this.pageKey]);
                 }
                 this.draw();
                 this.callback(d);
@@ -107,7 +107,7 @@
                         return _this.lastPage;
                     },
                     'default': function(type){
-                        return parseInt(type)
+                        return parseInt(type);
                     }
                 }
                 var page = (actionMap[oLi.innerText] || actionMap['default'])(oLi.innerText);
