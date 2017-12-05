@@ -12,7 +12,7 @@
         this.before = config.before || '';
         this.callback = config.callback || '';
         
-        this.Ajax();
+        //this.Ajax();
         this.bindEvent();
     }
     Pagination.prototype.update = function(data){//ajax时添加额外的参数
