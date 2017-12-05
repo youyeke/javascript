@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>测试遮掩层</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link href="css/bootstrap-maskTips.css" rel="stylesheet" />
+		<script src="js/bootstrap-maskTips.js"></script>
+	</head>
+	<body>
+		<input type="button"  value="普通的tips" onclick="openTips()"/>
+		<input type="button"  value="修改了type的tips" onclick="openTips2()"/>
+		<input type="button"  value="有回调的tips" onclick="openTips3()"/>
+		<br>
+		<input type="button"  value="warn" onclick="openWarn()"/>
+		<br>
+		<input type="button"  value="wait"/>
+		<br>
+		<input type="button"  value="news" onclick="openNews()" />
+
+		<script>
+			function openTips(){
+				maskLayer.tips('提示的内容');
+			}
+			function openTips2(){
+				maskLayer.tips({message: '提示的内容',type: 'danger'});
+			}
+			function openTips3(){
+				maskLayer.tips('提示的内容',function(){
+					maskLayer.news('这是 Tips 的回调');
+				});
+			}
+
+			function openWarn(){
+				maskLayer.warn('警告的内容',function(){
+					maskLayer.news('这是 warn 的回调');
+				});
+			}
+
+			function openNews(){
+				maskLayer.news('this is news info - 1');
+				maskLayer.news('this is news info - 2','danger',1000);
+				maskLayer.news('this is news info - 3','success',2000);
+			}
+		</script>
+	</body>
+</html>
