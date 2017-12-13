@@ -105,6 +105,7 @@
 			setTimeout(function(){
 				oTips.style.marginLeft = window.innerWidth/2 - oTips.clientWidth/2 +'px';
 				oTips.style.transform = 'scale(1)';
+				oTips.style.zoom = 1;
 				document.getElementById("maskBackground").style.background = 'hsla(0,0%,0%,0.5)';
 			},20);
 		},
