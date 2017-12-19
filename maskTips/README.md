@@ -1,8 +1,71 @@
-## Demo
+# Demo
 
 > https://youyeke.github.io/javascript/maskTips/
 
-## 使用方法
+bootstrap 版
+
+> https://youyeke.github.io/javascript/maskTips/index-bootstrap.html
+
+# 使用方法
+
+## bootstrap 版
+
+引入 bootstrap-maskTips.js 和 css/bootstrap-maskTips.css
+
+### 弹出提示
+
+```javascript
+//简洁调用
+maskLayer.tips('提示的内容');
+//完整参数调用,message 必须，其它可选
+maskLayer.tips({
+	title : '提示框标题',
+	message : '提示框内容',
+	type : 'primary', // 提示框的主题颜色，支持 Bootstrap 的全部主题颜色。
+	confirm : '确定' // ‘确定’ 按钮的文字
+});
+```
+
+PS. 无论是简洁调用还是全参数调用，第二个参数可传入一个回调函数。该回调函数将会在点击 ‘确定’ 后调用。
+
+### 弹出确认提示
+
+```javascript
+//简洁调用
+maskLayer.warn('提示的内容');
+//完整参数调用,message 必须，其它可选
+maskLayer.warn({
+	title : '提示框标题',
+	message : '提示框内容',
+	type : 'danger', // 提示框的主题颜色，支持 Bootstrap 的全部主题颜色。
+	cancel : '取消', // ‘取消’ 按钮的文字
+	confirm : '确定' // ‘确定’ 按钮的文字
+});
+```
+
+PS. 无论是简洁调用还是全参数调用，第二个参数可传入一个回调函数。该回调函数将会在点击 ‘确定’ 后调用。
+
+### 广播提示
+
+广播提示会出现在屏幕正上方，不拥堵用户操作。默认 1.5 秒后自动消失。
+
+```javascript
+//简洁调用
+maskLayer.news('提示的内容');
+//完整参数调用,message 必须，其它可选
+maskLayer.news({
+	title : '提示框标题',
+	message : '提示框内容',
+	type : 'info', // 广播提示的主题颜色，支持 Bootstrap 的全部主题颜色。
+	time : 3000 // 多少毫秒后自动消失
+});
+```
+
+PS. 无论是简洁调用还是全参数调用，第二个参数可传入一个回调函数。该回调函数将会在广播提示消失后调用。
+
+
+
+## 无依赖版
 
     在引入 js 后，会暴露一个全局对象：maskLayer
 ### maskLayer.tips
