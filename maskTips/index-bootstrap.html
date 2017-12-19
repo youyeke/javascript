@@ -5,6 +5,7 @@
 		<title>测试遮掩层</title>
 		<link href="css/bootstrap.min.css" rel="stylesheet" />
 		<link href="css/bootstrap-maskTips.css" rel="stylesheet" />
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 		<script src="js/bootstrap-maskTips.js"></script>
 	</head>
 	<body>
@@ -13,8 +14,6 @@
 		<input type="button"  value="有回调的tips" onclick="openTips3()"/>
 		<br>
 		<input type="button"  value="warn" onclick="openWarn()"/>
-		<br>
-		<input type="button"  value="wait"/>
 		<br>
 		<input type="button"  value="news" onclick="openNews()" />
 
@@ -38,9 +37,9 @@
 			}
 
 			function openNews(){
-				maskLayer.news('this is news info - 1');
-				maskLayer.news('this is news info - 2','danger',1000);
-				maskLayer.news('this is news info - 3','success',2000);
+				maskLayer.news('第一条提示');
+				maskLayer.news({message: '第二条提示',type: 'danger',time: 4000});
+				maskLayer.news({message: '第三条提示',type: 'success',time: 3000});
 			}
 		</script>
 	</body>
