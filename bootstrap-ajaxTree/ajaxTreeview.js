@@ -6,6 +6,7 @@
         this.parentKey = config.parentKey || 'parentKey';
         this.selectCallback = config.selectCallback || '';
         this.updateCallback = config.updateCallback || '';
+        this.lonely = config.lonely || false;
         $.ajax({
             url: config.url,
             type: 'get',
@@ -36,7 +37,7 @@
                     _this.selectCallback(oLi.dataset.id,parentID);
                 }
             }
-            if(e.target.tagName === "I" && e.target.tagName !== 'UI'){
+            if(e.target.tagName === "I" && e.target.tagName !== 'UI'&& !_this.lonely){
                 if(e.target.className !== 'unfolded'){
                     //展开节点
                     e.target.className = 'unfolded';
@@ -50,13 +51,14 @@
         });
         this.bandDOM.addEventListener('dblclick',function(e){
             var oEventDOM = e.target;
+            if(oEventDOM.tagName === 'I') return false;//避免与单击事件重复触发
             if(oEventDOM.tagName === 'DIV'){
                 oEventDOM = oEventDOM.childNodes[0];
             }
             if(oEventDOM.tagName === 'SPAN'){
                 oEventDOM = oEventDOM.previousElementSibling;
             }
-            if(oEventDOM.tagName === 'I'){
+            if(oEventDOM.tagName === 'I'&& !_this.lonely){
                 if(oEventDOM.className !== 'unfolded'){
                     //展开节点
                     oEventDOM.className = 'unfolded';
@@ -70,9 +72,13 @@
         });
     }
     AjaxTreeview.prototype.draw = function(oDOM,oData){
-        html = '<ul class="treeview">';
+        if(this.lonely){
+            html = '<ul class="treeview lonely">';
+        }else{
+            html = '<ul class="treeview">';
+        }
         for(var i in oData){
-            html += '<li data-id="'+ oData[i].id +'"><div><i></i><span>'+ oData[i].title + '</span></div></li>';
+            html += '<li data-id="'+ oData[i].id +'"><div><i></i><span>'+ oData[i][this.key] + '</span></div></li>';
         }
         html += '</ul>';
         oDOM.innerHTML += html;
