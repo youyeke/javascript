@@ -43,7 +43,8 @@
         });
     }
     Pagination.prototype.draw = function(){
-        var html = '<ul class="pagination">';
+        var html = '<ul class="pagination">',
+            page = this.page;
         html += this.drawPrevious();
         html += this.pageBefore();
         html += '<li class="active"><a href="javascript:;">'+ this.page +'</a></li>';
@@ -51,6 +52,9 @@
         html += this.drawNext();
         html += '</ul>';
         this.bindDOM.innerHTML = html;
+        setTimeout(function(){
+            $('#pagination_lastPage')[0].title = '第 '+ page + ' 页';
+        },20);
     }
     Pagination.prototype.drawPrevious = function(){
         var html = '<li><a href="javascript:;"><span aria-hidden="true">&laquo;</span></a></li>';
@@ -60,9 +64,10 @@
         return html;
     }
     Pagination.prototype.drawNext = function(){
-        var html = '<li><a href="javascript:;"><span aria-hidden="true">&raquo;</span></a></li>';
+        var html = '<li id="pagination_lastPage"><a href="javascript:;"><span aria-hidden="true">&raquo;</span></a></li>';
+        console.log(this.page,this.lastPage)
         if(this.page >= this.lastPage){
-            html = html.replace(/<li>/,'<li class="disabled">');
+            html = html.replace(/<li id="pagination_lastPage">/,'<li id="pagination_lastPage" class="disabled">');
         }
         return html;
     }
